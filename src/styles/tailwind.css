@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply text-white shadow-lg 
+          font-bold rounded-md bg-blue-800 px-5 py-3;
+  @apply hover:bg-blue-600;
+}
+
+.btn:active {
+  @apply transform scale-95 shadow-xl;
+}
