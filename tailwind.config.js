@@ -5,7 +5,11 @@ module.exports = {
     fontFamily: {
       'inter': ['Inter', 'sans-serif']
     },
-    extend: {},
+    extend: {
+      transitionTimingFunction: {
+        'bouncy': 'cubic-bezier(0.68, -0.6, 0.32, 1.6)'
+      }
+    },
   },
   variants: {
     extend: {
