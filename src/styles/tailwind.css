@@ -17,9 +17,24 @@
 }
 
 .input {
-  @apply shadow-md outline-none rounded border-2 bg-gray-100 focus:ring-2 px-3 py-2;
+  @apply outline-none rounded-lg appearance-none border-2 bg-gray-100 focus:ring-2 px-3 py-2;
 }
 
 .input-label {
-  @apply uppercase font-bold mb-1 text-blue-700 text-sm;
+  @apply uppercase font-bold mb-1 text-blue-700 text-xs;
+}
+
+.anim-delay-100 {
+  animation-delay: 100ms;
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }

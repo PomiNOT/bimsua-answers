@@ -6,7 +6,7 @@
       enter-active-class="transform transition ease-bouncy duration-300"
       leave-from-class="scale-100 opacity-100"
       leave-to-class="scale-75 opacity-0"
-      leave-active-class="transform transition ease-bouncy duration-300"
+      leave-active-class="transform transition ease-bouncy duration-200"
       mode="out-in"
     >
     <div v-if="!showForm">
@@ -40,7 +40,7 @@
         <p class="text-gray-500">Enter below and you're ready to go!</p>
       </div>
       <div class="my-10">
-        <div class="flex flex-col mb-3">
+        <div class="flex flex-col mb-5">
           <label class="input-label" for="name">Answer name</label>
           <input type="text" id="name" placeholder="Name" class="input">
         </div>
@@ -52,7 +52,9 @@
       <div class="flex justify-center">
         <button type="button" class="btn" @click="showForm = false">Go back</button>
         <span class="mx-1"></span>
-        <button type="button" class="btn">Let's go!</button>
+        <router-link to="/edit">
+          <button type="button" class="btn">Let's go!</button>
+        </router-link>
       </div>
     </form>
     </transition>

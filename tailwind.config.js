@@ -8,6 +8,9 @@ module.exports = {
     extend: {
       transitionTimingFunction: {
         'bouncy': 'cubic-bezier(0.68, -0.6, 0.32, 1.6)'
+      },
+      animation: {
+        'slidein': 'slidein 200ms forwards'
       }
     },
   },
