@@ -1,5 +1,5 @@
 <template>
-  <div class="font-inter h-screen grid place-items-center">
+  <div v-if="!loadingDone" class="font-inter h-screen grid place-items-center">
     <div class="flex flex-col items-center">
       <two-ends-progress class="w-48 sm:w-64" :state="state" />
       <div class="mt-8 text-center">
@@ -10,17 +10,20 @@
       </div>
     </div>
   </div>
+  <editor v-else />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import TwoEndsProgress from '../components/TwoEndsProgress.vue';
+import Editor from '../components/Editor.vue';
 
 export default defineComponent({
   name: 'Edit',
-  components: { TwoEndsProgress },
+  components: { TwoEndsProgress, Editor },
   data: () => ({
-    state: 0
+    state: 0,
+    loadingDone: false
   }),
   computed: {
     stateToText(): string {

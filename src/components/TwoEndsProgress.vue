@@ -25,7 +25,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'TwoEndsProgress',
   props: {
-    state: Number
+    state: { type: Number, required: true }
   }
 })
 </script>
