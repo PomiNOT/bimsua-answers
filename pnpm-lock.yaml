@@ -9,11 +9,13 @@ specifiers:
   typescript: ^4.1.3
   vite: ^2.1.5
   vue: ^3.0.5
+  vue-flip-toolkit: github:PomiNOT/vue-flip-toolkit
   vue-router: ^4.0.6
   vue-tsc: ^0.0.24
 
 dependencies:
   vue: 3.0.11
+  vue-flip-toolkit: github.com/PomiNOT/vue-flip-toolkit/e6746d6d706f675ca9cadcc8e4ee05e802e9a2ee
   vue-router: 4.0.6_vue@3.0.11
 
 devDependencies:
@@ -489,6 +491,13 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
+
+  /flip-toolkit/7.0.13:
+    resolution: {integrity: sha512-9rj4mPk2FeKu/FW8Rvl3YrU8Hc7uSUYpzk3ZBeVF0xaaZsoVMLrfmffrDsrQgASvbTbd5kEf9yjfSwEZ+30cKg==}
+    engines: {node: '>=8', npm: '>=5'}
+    dependencies:
+      rematrix: 0.2.2
+    dev: false
 
   /fraction.js/4.0.13:
     resolution: {integrity: sha512-E1fz2Xs9ltlUp+qbiyx9wmt2n9dRzPsS11Jtdb8D2o+cC7wr9xkkKsVKJuBX0ST+LVS+LhLO+SbLJNtfWcJvXA==}
@@ -1016,6 +1025,10 @@ packages:
       postcss-value-parser: 3.3.1
     dev: true
 
+  /rematrix/0.2.2:
+    resolution: {integrity: sha512-agFFS3RzrLXJl5LY5xg/xYyXvUuVAnkhgKO7RaO9J1Ssth6yvbO+PIiV67V59MB5NCdAK2flvGvNT4mdKVniFA==}
+    dev: false
+
   /resolve/1.20.0:
     resolution: {integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==}
     dependencies:
@@ -1231,3 +1244,11 @@ packages:
   /yallist/3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
     dev: true
+
+  github.com/PomiNOT/vue-flip-toolkit/e6746d6d706f675ca9cadcc8e4ee05e802e9a2ee:
+    resolution: {tarball: https://codeload.github.com/PomiNOT/vue-flip-toolkit/tar.gz/e6746d6d706f675ca9cadcc8e4ee05e802e9a2ee}
+    name: vue-flip-toolkit
+    version: 1.6.0
+    dependencies:
+      flip-toolkit: 7.0.13
+    dev: false

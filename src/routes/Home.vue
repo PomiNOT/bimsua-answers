@@ -1,14 +1,6 @@
 <template>
-  <div class="font-inter h-screen grid place-items-center">
-    <transition
-      enter-from-class="scale-75 opacity-0"
-      enter-to-class="scale-100 opacity-100"
-      enter-active-class="transform transition ease-bouncy duration-300"
-      leave-from-class="scale-100 opacity-100"
-      leave-to-class="scale-75 opacity-0"
-      leave-active-class="transform transition ease-bouncy duration-200"
-      mode="out-in"
-    >
+  <div class="h-screen grid place-items-center">
+    <bounce-transition mode="out-in">
       <div v-if="!showForm">
         <div class="flex flex-col items-center">
           <illustration class="transform origin-center -rotate-12 scale-90 md:scale-100" />
@@ -59,17 +51,18 @@
           </router-link>
         </div>
       </form>
-    </transition>
+    </bounce-transition>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Illustration from '../components/Illustration.vue';
+import BounceTransition from '../components/common-transitions/BounceTransition.vue';
 
 export default defineComponent({
   name: 'HomeScreen',
-  components: { Illustration },
+  components: { Illustration, BounceTransition },
   data: () => ({
     showForm: false
   })

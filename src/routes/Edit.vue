@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loadingDone" class="font-inter h-screen grid place-items-center">
+  <div v-if="!loadingDone" class="h-screen grid place-items-center">
     <div class="flex flex-col items-center">
       <two-ends-progress class="w-48 sm:w-64" :state="state" />
       <div class="mt-8 text-center">
@@ -32,6 +32,7 @@ export default defineComponent({
   },
   mounted() {
     setTimeout(() => this.state++, 1000);
+    setTimeout(() => this.loadingDone = true, 2000);
   }
 });
 </script>

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "vue": "^3.0.5",
+    "vue-flip-toolkit": "github:PomiNOT/vue-flip-toolkit",
     "vue-router": "^4.0.6"
   },
   "devDependencies": {
