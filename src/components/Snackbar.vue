@@ -22,7 +22,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Flipper, Flipped } from 'vue-flip-toolkit';
 import BounceTransition from './common-transitions/BounceTransition.vue';
 import FadeTransition from './common-transitions/FadeTransition.vue';
 
