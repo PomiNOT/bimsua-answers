@@ -28,7 +28,7 @@ import FadeTransition from './common-transitions/FadeTransition.vue';
 export default defineComponent({
   name: 'Snackbar',
   components: {
-    Flipper, Flipped, FadeTransition,
+    FadeTransition,
     BounceTransition
   },
   props: {
