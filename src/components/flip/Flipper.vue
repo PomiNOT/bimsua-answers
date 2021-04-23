@@ -1,30 +1,57 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Flipping from 'flipping/lib/adapters/web';
+import { Flipper } from 'flip-toolkit';
 
 export default defineComponent({
   setup(props, context) {
     return () => context.slots.default?.({});
   },
   data: () => ({
-    flippingInstance: null as Flipping | null
+    flippingInstance: null as Flipper | null
   }),
   beforeUpdate() {
-    this.flippingInstance?.read();
+    this.flippingInstance?.recordBeforeUpdate();
   },
   updated() {
     this.$nextTick(() => {
-      this.flippingInstance?.flip();
+      this.updateFlipList();
+      this.flippingInstance?.update(null, null);
     });
+  },
+  methods: {
+    updateFlipList() {
+      let parent = this.$el.parentElement;
+
+      parent.querySelectorAll('[data-flip-key]').forEach((flipElement: Element) => {
+        this.flippingInstance?.addFlipped({
+          element: flipElement as HTMLElement,
+          flipId: (flipElement as HTMLElement).dataset.flipKey,
+          children: null
+        });
+
+        flipElement
+          .querySelectorAll('[data-inverse-flip]')
+          .forEach((inverseFlipElement: Element) => {
+            this.flippingInstance?.addInverted({
+              element: inverseFlipElement as HTMLElement,
+              parent: flipElement as HTMLElement,
+              opacity: true,
+              translate: true,
+              scale: true,
+              transformOrigin: '0 0'
+            });
+          });
+      });
+    }
   },
   mounted() {
     let parent = this.$el.parentElement;
 
-    this.flippingInstance = new Flipping({
-      selector: () => {
-        return Array.from(parent.querySelectorAll('[data-flip-key]'));
-      }
+    this.flippingInstance = new Flipper({
+      element: parent
     });
+
+    this.updateFlipList();
   }
 });
 </script>

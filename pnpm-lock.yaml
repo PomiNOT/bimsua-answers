@@ -4,7 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^1.2.1
   '@vue/compiler-sfc': ^3.0.5
   autoprefixer: ^10.2.5
-  flipping: ^1.1.0
+  flip-toolkit: ^7.0.13
   postcss: ^8.2.10
   tailwindcss: ^2.1.1
   typescript: ^4.1.3
@@ -14,7 +14,7 @@ specifiers:
   vue-tsc: ^0.0.24
 
 dependencies:
-  flipping: 1.1.0
+  flip-toolkit: 7.0.13
   vue: 3.0.11
   vue-router: 4.0.6_vue@3.0.11
 
@@ -492,10 +492,11 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /flipping/1.1.0:
-    resolution: {integrity: sha512-aG+TldohfRa6t5fwD2SHvtV193lDrEbHIFOzfYogzJzjxLaFpoek39S7rsIAmE3KKVM84I24J2Z50PsPqTrldA==}
+  /flip-toolkit/7.0.13:
+    resolution: {integrity: sha512-9rj4mPk2FeKu/FW8Rvl3YrU8Hc7uSUYpzk3ZBeVF0xaaZsoVMLrfmffrDsrQgASvbTbd5kEf9yjfSwEZ+30cKg==}
+    engines: {node: '>=8', npm: '>=5'}
     dependencies:
-      rematrix: 0.1.3
+      rematrix: 0.2.2
     dev: false
 
   /fraction.js/4.0.13:
@@ -1024,8 +1025,8 @@ packages:
       postcss-value-parser: 3.3.1
     dev: true
 
-  /rematrix/0.1.3:
-    resolution: {integrity: sha512-Wpk2WXYrN7brfFHDVljhsWBkMg0RCkS8ZlymUuUrlmLtfm72zLF50VWpRdAjjNHagupqXVeWiS1UOyjoZlDZyA==}
+  /rematrix/0.2.2:
+    resolution: {integrity: sha512-agFFS3RzrLXJl5LY5xg/xYyXvUuVAnkhgKO7RaO9J1Ssth6yvbO+PIiV67V59MB5NCdAK2flvGvNT4mdKVniFA==}
     dev: false
 
   /resolve/1.20.0:

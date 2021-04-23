@@ -1,9 +1,16 @@
 <template>
-  <div class="fixed w-screen flex justify-center left-0 bottom-8 z-50">
-    <flipper>
-      <div data-flip-key="box" class="transition-all duration-500 bg-white h-10" :class="show ? 'w-1 opacity-0' : 'w-3/4'"></div>
-    </flipper>
-  </div>
+  <flipper>
+    <div class="pointer-events-none flex fixed bottom-5 left-0 w-screen justify-center" v-if="show">
+      <div data-flip-key="dialog" class="overflow-hidden flex items-center justify-center h-10 w-5/12 bg-white">
+        <div class="font-bold" data-inverse-flip>More options</div>
+      </div>
+    </div>
+    <div data-flip-key="dialog" class="pointer-events-none flex fixed top-0 left-0 h-screen w-screen justify-center items-center" v-else>
+      <div data-flip-key="dialog" class="overflow-hidden flex items-center justify-center h-64 w-64 bg-white">
+        <div class="font-bold" data-inverse-flip>Settings</div>
+      </div>
+    </div>
+  </flipper>
 </template>
 
 <script lang="ts">
