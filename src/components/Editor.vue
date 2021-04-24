@@ -1,7 +1,6 @@
 <template>
   <div class="relative p-3 h-screen bg-blue-800">
-    <button class="btn btn-white" @click="open = !open">Let's go</button>
-    <snackbar :show="open" />
+    <snackbar />
   </div>
 </template>
 
@@ -11,9 +10,6 @@ import Snackbar from './Snackbar.vue';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar },
-  data: () => ({
-    open: false
-  })
+  components: { Snackbar }
 });
 </script>

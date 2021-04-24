@@ -1,13 +1,22 @@
 <template>
   <flipper>
-    <div class="pointer-events-none flex fixed bottom-5 left-0 w-screen justify-center" v-if="show">
-      <div data-flip-key="dialog" class="overflow-hidden flex items-center justify-center h-10 w-5/12 bg-white">
-        <div class="font-bold" data-inverse-flip>More options</div>
+    <div class="flex fixed bottom-5 left-0 w-screen justify-center" v-if="!expanded">
+      <div data-flip-key="dialog" @click="expanded = true" class="overflow-hidden cursor-pointer flex items-center justify-center rounded h-10 w-40 bg-white">
+        <div class="font-bold" data-inverse-flip>Send suggestion</div>
       </div>
     </div>
-    <div data-flip-key="dialog" class="pointer-events-none flex fixed top-0 left-0 h-screen w-screen justify-center items-center" v-else>
-      <div data-flip-key="dialog" class="overflow-hidden flex items-center justify-center h-64 w-64 bg-white">
-        <div class="font-bold" data-inverse-flip>Settings</div>
+    <div class="flex fixed top-0 left-0 h-screen w-screen justify-center items-center" v-else>
+      <div 
+        data-flip-key="dialog" 
+        class="overflow-hidden rounded bg-white"
+      >
+        <form class="flex p-6 flex-col items-end" data-inverse-flip>
+          <div class="flex flex-col mb-5">
+            <label class="input-label" for="name">Send suggestion</label>
+            <input type="text" id="suggestion" placeholder="Suggestion" class="input">
+          </div>
+          <button type="button" @click="expanded = false" class="btn">Send</button>
+        </form>
       </div>
     </div>
   </flipper>
@@ -22,11 +31,8 @@ export default defineComponent({
   components: {
     Flipper
   },
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  }
+  data: () => ({
+    expanded: false
+  })
 });
 </script>

@@ -36,9 +36,9 @@ export default defineComponent({
               element: inverseFlipElement as HTMLElement,
               parent: flipElement as HTMLElement,
               opacity: true,
-              translate: true,
+              translate: false,
               scale: true,
-              transformOrigin: '0 0'
+              transformOrigin: 'center'
             });
           });
       });
