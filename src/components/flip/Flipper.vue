@@ -1,7 +1,8 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, nextTick } from 'vue';
 import { Flipper } from 'flip-toolkit';
 import { SpringConfig } from 'flip-toolkit/lib/springSettings/types';
+import isEqual from 'lodash.isequal';
 
 export default defineComponent({
   setup(props, context) {
@@ -19,20 +20,20 @@ export default defineComponent({
     }
   },
   data: () => ({
-    flippingInstance: null as Flipper | null
+    flippingInstance: null as Flipper | null,
+    oldFlipKey: null as any | null
   }),
   beforeUpdate() {
     this.flippingInstance?.recordBeforeUpdate();
   },
-  watch: {
-    flipKey(newKey, oldKey) {
-      if (newKey == oldKey) return;
-
-      requestAnimationFrame(() => {
+  updated() {
+    nextTick(() => {
+      if (!isEqual(this.oldFlipKey, this.flipKey)) {
         this.updateFlipList();
         this.flippingInstance?.update(null, null);
-      });
-    }
+        this.oldFlipKey = this.flipKey;
+      }
+    });
   },
   methods: {
     updateFlipList() {
@@ -54,7 +55,7 @@ export default defineComponent({
               opacity: true,
               translate: false,
               scale: true,
-              transformOrigin: 'center'
+              transformOrigin: 'center',
             });
           });
       });
@@ -73,6 +74,8 @@ export default defineComponent({
       spring: springConf,
       onComplete: () => this.$emit('onComplete')
     });
+
+    this.oldFlipKey = this.flipKey;
 
     this.updateFlipList();
   }

@@ -72,13 +72,14 @@ export default defineComponent({
   },
   mounted() {
     setInterval(() => {
+      if (this.expanded) return;
+      
       this.showText = false;
-
       setTimeout(() => {
         this.index++;
         this.index %= this.textList.length;
-      }, 300);
-    }, 5000);
+      }, 200);
+    }, 2000);
   }
 });
 </script>
