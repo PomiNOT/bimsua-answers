@@ -1,5 +1,5 @@
 <template>
-  <div class="relative p-3 h-screen bg-blue-800">
+  <div class="relative p-3 h-screen bg-gray-200">
     <snackbar />
   </div>
 </template>

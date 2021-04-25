@@ -1,10 +1,22 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Flipper } from 'flip-toolkit';
+import { SpringConfig } from 'flip-toolkit/lib/springSettings/types';
 
 export default defineComponent({
   setup(props, context) {
     return () => context.slots.default?.({});
+  },
+  emits: ['onComplete'],
+  props: {
+    spring: {
+      type: Object,
+      required: false
+    },
+    flipKey: {
+      type: [String, Number, Boolean, Object],
+      required: true
+    }
   },
   data: () => ({
     flippingInstance: null as Flipper | null
@@ -12,11 +24,15 @@ export default defineComponent({
   beforeUpdate() {
     this.flippingInstance?.recordBeforeUpdate();
   },
-  updated() {
-    this.$nextTick(() => {
-      this.updateFlipList();
-      this.flippingInstance?.update(null, null);
-    });
+  watch: {
+    flipKey(newKey, oldKey) {
+      if (newKey == oldKey) return;
+
+      requestAnimationFrame(() => {
+        this.updateFlipList();
+        this.flippingInstance?.update(null, null);
+      });
+    }
   },
   methods: {
     updateFlipList() {
@@ -42,13 +58,20 @@ export default defineComponent({
             });
           });
       });
-    }
+    },
   },
   mounted() {
     let parent = this.$el.parentElement;
 
+    let springConf: SpringConfig = this.spring ?? {
+      stiffness: 1500,
+      damping: 100
+    }
+
     this.flippingInstance = new Flipper({
-      element: parent
+      element: parent,
+      spring: springConf,
+      onComplete: () => this.$emit('onComplete')
     });
 
     this.updateFlipList();
