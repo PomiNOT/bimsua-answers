@@ -30,10 +30,10 @@
                       font-mono rounded-full text-white bg-green-600"
             >+</div>
           </div>
-          <h1 class="font-black text-blue-800 text-3xl">Create</h1>
+          <h1 class="font-black text-blue-800 text-2xl md:text-4xl">Create</h1>
           <p class="text-gray-500">Enter below and you're ready to go!</p>
         </div>
-        <div class="my-10">
+        <div class="my-5 md:my-10">
           <div class="flex flex-col mb-5">
             <label class="input-label" for="name">Answer name</label>
             <input type="text" id="name" placeholder="Name" class="input">
