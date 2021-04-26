@@ -3,9 +3,9 @@
     <bounce-transition mode="out-in">
       <div v-if="!showForm">
         <div class="flex flex-col items-center">
-          <illustration class="transform origin-center -rotate-12 scale-90 md:scale-100" />
-          <div class="mt-6 text-center">
-            <h1 class="font-bold text-blue-800 text-4xl">Answers!</h1>
+          <illustration class="transform origin-center -rotate-12 scale-75 md:scale-90" />
+          <div class="mt-3 md:mt-6 text-center">
+            <h1 class="font-bold text-blue-800 text-3xl md:text-4xl">Answers!</h1>
             <p class="px-10 text-gray-500">Create and share your multiple choice answers <span class="underline font-bold">free</span>, no login required.</p>
           </div>
           <div class="mt-6">
@@ -22,8 +22,8 @@
       
       <form class="px-4 flex flex-col w-full sm:w-3/4 md:w-1/2 max-w-lg" v-else>
         <div class="text-center flex flex-col items-center">
-          <div class="transform origin-center -rotate-12 scale-75 relative">
-            <illustration class="transform origin-center" />
+          <div class="transform origin-center -rotate-12 scale-75">
+            <illustration />
             <div 
               class="absolute grid place-items-center bottom-0 right-0 text-xl
                       transform translate-x-1/3 translate-y-1/3 w-7 h-7 leading-none

@@ -1,6 +1,6 @@
 <template>
-  <div class="relative p-3 h-screen bg-gray-200">
-    <snackbar />
+  <div class="border-4 border-blue-600">
+    
   </div>
 </template>
 

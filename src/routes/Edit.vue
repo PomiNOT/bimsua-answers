@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <editor v-else />
+  <editor class="h-screen" v-else />
 </template>
 
 <script lang="ts">

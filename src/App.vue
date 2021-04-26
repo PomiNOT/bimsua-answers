@@ -1,11 +1,9 @@
 <template>
-  <div class="font-inter">
-    <router-view v-slot="{ Component }">
-      <fade-transition mode="out-in">
-        <component :is="Component" />
-      </fade-transition>
-    </router-view>
-  </div>
+  <router-view v-slot="{ Component }">
+    <fade-transition mode="out-in">
+      <component :is="Component" />
+    </fade-transition>
+  </router-view>
 </template>
 
 <script lang="ts">
