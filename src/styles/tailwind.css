@@ -4,7 +4,7 @@
 
 @layer components {
   .btn {
-    @apply text-white shadow-lg 
+    @apply text-white shadow-md 
             font-bold rounded-md bg-blue-800 px-4 py-2;
     @apply hover:bg-blue-600;
   }
@@ -22,7 +22,7 @@
   }
   
   .input {
-    @apply outline-none rounded-lg appearance-none bg-white shadow-md focus:ring-2 px-3 py-2;
+    @apply outline-none rounded-md appearance-none bg-white shadow-md focus:ring-2 px-3 py-2;
   }
   
   .input-label {

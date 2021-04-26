@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <button type="button" class="btn" @click="showForm = false">Go back</button>
+          <button type="button" class="btn btn-white" @click="showForm = false">Go back</button>
           <span class="mx-1"></span>
           <router-link to="/edit">
             <button type="button" class="btn">Let's go!</button>

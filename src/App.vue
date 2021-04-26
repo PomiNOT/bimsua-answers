@@ -1,4 +1,5 @@
 <template>
+  <div id="particles" class="fixed w-screen h-screen z-10 top-0 left-0"></div>
   <router-view v-slot="{ Component }">
     <fade-transition mode="out-in">
       <component :is="Component" />
@@ -7,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import FadeTransition from "./components/common-transitions/FadeTransition.vue";
+import { defineComponent } from 'vue';
+import FadeTransition from './components/common-transitions/FadeTransition.vue';
 
 export default defineComponent({
   components: { FadeTransition },

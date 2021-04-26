@@ -1,5 +1,5 @@
 <template>
-  <flipper :flip-key="expanded" @onComplete="showText = true" :spring="springConfig">
+  <flipper :flip-key="expanded" :spring="springConfig">
     
   </flipper>
 </template>
