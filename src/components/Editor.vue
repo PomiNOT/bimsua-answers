@@ -1,25 +1,36 @@
 <template>
-  <div class="border-2 border-blue-600">
-    <header class="p-2 flex items-center bg-gray-300">
-      <div class="flex-1 leading-tight">
-        <h1 class="text-blue-800 font-bold">Limits</h1>
-        <p class="text-gray-500">6 questions</p>
-      </div>
-      <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
-        <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
-        <span class="ml-2">LIVE {{ timeLive }}</span>
-      </div>
-    </header>
+  <header class="
+    fixed w-full backdrop-filter backdrop-blur-md
+    bg-gray-200 bg-opacity-50
+    h-18 p-2 flex items-center"
+  >
+    <div class="flex-1 leading-tight">
+      <h1 class="text-blue-800 font-bold">Limits</h1>
+      <p class="text-gray-500">6 questions</p>
+    </div>
+    <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
+      <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
+      <span class="ml-2">LIVE</span>
+    </div>
+  </header>
+  <div class="space-y-2 p-2 pt-16">
+    <edit-card 
+      v-for="q in sheet"
+      :question="q.question"
+      :answer="q.answer"
+      :key="q.question"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Snackbar from './Snackbar.vue';
+import EditCard from './EditCard.vue';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar },
+  components: { Snackbar, EditCard },
   methods: {
     formatDuration(seconds: number): string {
       if (seconds < 0) throw new Error('Duration must be positive.');
@@ -31,16 +42,18 @@ export default defineComponent({
       return `${hours}:${mins}:${secs}`;
     }
   },
-  computed: {
-    timeLive(): string {
-      return this.formatDuration(this.seconds);
-    }
-  },
   data: () => ({
-    seconds: 0,
+    sheet: [] as any[]
   }),
   mounted() {
-    setInterval(() => this.seconds++, 1000);
+    const answerMap = ['A', 'B', 'C', 'D'];
+
+    for (let i = 0; i < 22; i++) {
+      this.sheet.push({
+        question: i + 1,
+        answer: answerMap[i % 4]
+      });
+    }
   }
 });
 </script>

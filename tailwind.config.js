@@ -16,8 +16,12 @@ module.exports = {
   },
   variants: {
     extend: {
-      backgroundColor: ['hover', 'active']
+      backgroundColor: ['hover', 'active'],
+      textColor: ['hover'],
+      divideColor: ['hover']
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio')
+  ],
 }

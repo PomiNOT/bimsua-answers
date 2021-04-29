@@ -1,4 +1,5 @@
 dependencies:
+  '@tailwindcss/aspect-ratio': 0.2.0
   flip-toolkit: 7.0.13
   lodash.isequal: 4.5.0
   vue: 3.0.11
@@ -62,6 +63,10 @@ packages:
       node: '>= 8'
     resolution:
       integrity: sha512-8Broas6vTtW4GIXTAHDoE32hnN2M5ykgCpWGbuXHQ15vEMqr23pB76e/GZcYsZCHALv50ktd24qhEyKr6wBtow==
+  /@tailwindcss/aspect-ratio/0.2.0:
+    dev: false
+    resolution:
+      integrity: sha512-v5LyHkwXj/4lI74B06zUrmWEdmSqS43+jw717pkt3fAXqb7ALwu77A8t7j+Bej+ZbdlIIqNMYheGN7wSGV1A6w==
   /@types/lodash.isequal/4.5.5:
     dependencies:
       '@types/lodash': 4.14.168
@@ -1362,6 +1367,7 @@ packages:
     resolution:
       integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 specifiers:
+  '@tailwindcss/aspect-ratio': ^0.2.0
   '@types/lodash.isequal': ^4.5.5
   '@vitejs/plugin-vue': ^1.2.1
   '@vue/compiler-sfc': ^3.0.5

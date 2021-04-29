@@ -23,7 +23,7 @@ export default defineComponent({
   components: { TwoEndsProgress, Editor },
   data: () => ({
     state: 0,
-    loadingDone: false
+    loadingDone: true
   }),
   computed: {
     stateToText(): string {

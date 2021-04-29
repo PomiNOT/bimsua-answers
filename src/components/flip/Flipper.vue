@@ -5,6 +5,7 @@ import { SpringConfig } from 'flip-toolkit/lib/springSettings/types';
 import isEqual from 'lodash.isequal';
 
 export default defineComponent({
+  name: 'Flipper',
   setup(props, context) {
     return () => context.slots.default?.({});
   },
