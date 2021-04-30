@@ -1,7 +1,7 @@
 <template>
     <div 
         class="
-            rounded-lg divide-x divide-gray-300 hover:divide-white focus-within:divide-white
+            rounded-lg divide-x divide-gray-300 focus-within:divide-white
             flex items-center
             h-20 bg-gray-200
             p-3 edit-card
@@ -54,36 +54,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.edit-card:focus-within, .edit-card:hover {
-    @apply bg-blue-600;
-    outline: none;
-}
-
-.edit-card:focus-within h2, .edit-card:hover h2 {
-    @apply text-gray-300;
-}
-
-.edit-card:focus-within h1, .edit-card:hover h1 {
-    @apply text-white;
-}
-
-.edit-card:focus-within .choice-button, .edit-card:hover .choice-button {
-    @apply border-white text-white;
+.edit-card:focus-within, .edit-card:focus {
+    @apply ring-2 ring-blue-400 outline-none;
 }
 
 .choice-button {
     @apply w-10 h-10 font-bold cursor-pointer grid;
-    @apply place-items-center rounded-full border-2 border-gray-400;
-    outline: none;
+    @apply place-items-center rounded-full border-2 border-gray-400 outline-none;
 }
 
-.choice-button:focus, .choice-button:hover {
-    @apply bg-white bg-opacity-25;
+.choice-button:focus {
+    @apply bg-green-400 text-white transform animate-pulse;
 }
 
 .selected {
-    position: relative;
-    color: white;
+    @apply text-white relative;
 }
 
 .selected::before {
@@ -96,7 +81,7 @@ export default defineComponent({
     z-index: 1;
     border-radius: 50%;
     @apply bg-green-500;
-    animation: scale 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    animation: scale 800ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .selected span {
@@ -105,10 +90,12 @@ export default defineComponent({
 
 @keyframes scale {
     from {
-        transform: scale(0);
+        transform: scale(1.8);
+        opacity: 0;
     }
     to {
         transform: scale(1);
+        opacity: 1;
     }
 }
 </style>
