@@ -1,6 +1,6 @@
 <template>
   <header class="
-    fixed w-full backdrop-filter backdrop-blur-md
+    fixed z-50 w-full backdrop-filter backdrop-blur-md
     bg-gray-200 bg-opacity-50
     h-18 p-2 flex items-center"
   >
@@ -13,11 +13,11 @@
       <span class="ml-2">LIVE</span>
     </div>
   </header>
-  <div class="space-y-2 p-2 pt-16">
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 p-2 pt-16">
     <edit-card 
       v-for="q in sheet"
       :question="q.question"
-      :answer="q.answer"
+      v-model:answer="q.answer"
       :key="q.question"
     />
   </div>
