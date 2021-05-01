@@ -7,14 +7,17 @@
     >
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">Limits</h1>
-        <p class="text-gray-500">6 questions</p>
+        <p class="text-gray-500">{{ this.sheet.length }} questions</p>
       </div>
       <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
         <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
         <span class="ml-2">LIVE</span>
       </div>
     </header>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 p-2 pt-16">
+    <div 
+      class="grid sm:h-screen sm:grid-flow-col gap-2 p-2 pt-16"
+      style="grid-template-rows: repeat(auto-fit, minmax(70px, 1fr));"
+    >
       <edit-card
         v-for="q in sheet"
         :question="q.question"
@@ -50,7 +53,7 @@ export default defineComponent({
   mounted() {
     const answerMap = ['A', 'B', 'C', 'D'];
 
-    for (let i = 0; i < 22; i++) {
+    for (let i = 0; i < 80; i++) {
       this.sheet.push({
         question: i + 1,
         answer: answerMap[i % 4]
