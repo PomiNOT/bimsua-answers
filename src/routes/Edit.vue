@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <editor class="h-screen" v-else />
+  <editor v-else />
 </template>
 
 <script lang="ts">
@@ -31,8 +31,8 @@ export default defineComponent({
     }
   },
   mounted() {
-    setTimeout(() => this.state++, 1000);
-    setTimeout(() => this.loadingDone = true, 2000);
+    setTimeout(() => this.state++, 200);
+    setTimeout(() => this.loadingDone = true, 400);
   }
 });
 </script>

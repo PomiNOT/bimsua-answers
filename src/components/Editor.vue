@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="h-screen">
     <header class="
-      fixed z-50 w-full backdrop-filter backdrop-blur-md
+      fixed top-0 left-0 z-10 w-full backdrop-filter backdrop-blur-md
       bg-gray-200 bg-opacity-50
       h-18 p-2 flex items-center"
     >
@@ -14,10 +14,8 @@
         <span class="ml-2">LIVE</span>
       </div>
     </header>
-    <div 
-      class="grid sm:h-screen sm:grid-flow-col gap-2 p-2 pt-16"
-      style="grid-template-rows: repeat(auto-fit, minmax(70px, 1fr));"
-    >
+
+    <div class="grid sm:h-full sm:overflow-x-auto sm:grid-flow-col gap-y-2 gap-x-6 px-2 pb-20 sm:pb-16 pt-16 editor-rows">
       <edit-card
         v-for="q in sheet"
         :question="q.question"
@@ -25,6 +23,8 @@
         :key="q.question"
       />
     </div>
+
+    <floating-menu />
   </div>
 </template>
 
@@ -32,10 +32,11 @@
 import { defineComponent } from 'vue';
 import Snackbar from './Snackbar.vue';
 import EditCard from './EditCard.vue';
+import FloatingMenu from './FloatingMenu.vue';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar, EditCard },
+  components: { Snackbar, EditCard, FloatingMenu },
   methods: {
     formatDuration(seconds: number): string {
       if (seconds < 0) throw new Error('Duration must be positive.');
@@ -62,3 +63,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.editor-rows {
+  grid-template-rows: repeat(auto-fit, minmax(70px, 1fr));
+}
+</style>
