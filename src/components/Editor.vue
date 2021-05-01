@@ -7,7 +7,7 @@
     >
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">Limits</h1>
-        <p class="text-gray-500">{{ this.sheet.length }} questions</p>
+        <p class="text-gray-500">{{ sheet.length }} questions</p>
       </div>
       <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
         <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
