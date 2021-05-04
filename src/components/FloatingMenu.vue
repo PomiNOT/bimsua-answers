@@ -20,9 +20,9 @@
           <h1 class="text-xl font-bold text-white">Action Menu</h1>
           <p class="text-gray-200 text-sm">Chooose an action to do to this answer sheet</p>
           <div class="flex flex-col my-6 space-y-2">
-            <button type="button" class="text-white border border-gray-400 hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25 py-1 px-2 rounded" @click="$router.push('/')">Save and return</button>
-            <button type="button" class="text-white border border-gray-400 hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25 py-1 px-2 rounded" @click="$router.push('/')">Discard this sheet</button>
-            <button type="button" class="text-white border border-gray-400 hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25 py-1 px-2 rounded" @click="expanded = false">Return</button>
+            <button type="button" class="dialog-button" @click="$router.push('/')">Save and return</button>
+            <button type="button" class="dialog-button" @click="$router.push('/')">Discard this sheet</button>
+            <button type="button" class="dialog-button" @click="expanded = false">Return</button>
           </div>
         </div>
       </div>
@@ -42,3 +42,10 @@ export default defineComponent({
   })
 });
 </script>
+
+<style scoped>
+.dialog-button {
+  @apply text-white border border-gray-400 py-1 px-2 rounded;
+  @apply hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25;
+}
+</style>

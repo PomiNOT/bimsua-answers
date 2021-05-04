@@ -16,6 +16,7 @@ specifiers:
   vue: ^3.0.5
   vue-router: ^4.0.6
   vue-tsc: ^0.0.24
+  web-animations-js: ^2.3.2
 
 dependencies:
   '@tailwindcss/aspect-ratio': 0.2.0
@@ -23,6 +24,7 @@ dependencies:
   lodash.isequal: 4.5.0
   vue: 3.0.11
   vue-router: 4.0.6_vue@3.0.11
+  web-animations-js: 2.3.2
 
 devDependencies:
   '@types/lodash.isequal': 4.5.5
@@ -1279,6 +1281,10 @@ packages:
       '@vue/compiler-dom': 3.0.11
       '@vue/runtime-dom': 3.0.11
       '@vue/shared': 3.0.11
+    dev: false
+
+  /web-animations-js/2.3.2:
+    resolution: {integrity: sha512-TOMFWtQdxzjWp8qx4DAraTWTsdhxVSiWa6NkPFSaPtZ1diKUxTn4yTix73A1euG1WbSOMMPcY51cnjTIHrGtDA==}
     dev: false
 
   /wrappy/1.0.2:
