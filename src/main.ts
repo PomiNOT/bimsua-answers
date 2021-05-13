@@ -3,7 +3,6 @@ import router from './router';
 
 import App from './App.vue';
 import './styles/tailwind.css';
-import 'web-animations-js';
 
 const app = createApp(App);
 app.use(router);
