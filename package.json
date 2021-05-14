@@ -10,6 +10,7 @@
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "flip-toolkit": "^7.0.13",
     "lodash.isequal": "^4.5.0",
+    "tsparticles": "^1.27.0",
     "vue": "^3.0.5",
     "vue-router": "^4.0.6"
   },

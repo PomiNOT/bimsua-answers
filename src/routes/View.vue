@@ -21,7 +21,7 @@ export default defineComponent({
     loadingDone: false
   }),
   mounted() {
-    setTimeout(() => this.loadingDone = true, 5000);
+    setTimeout(() => this.loadingDone = true, 2000);
   }
 });
 </script>
