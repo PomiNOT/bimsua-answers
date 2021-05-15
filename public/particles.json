@@ -8,7 +8,7 @@
       }
     },
     "color": {
-      "value": "#000000"
+      "value": "random"
     },
     "shape": {
       "type": "circle",
@@ -21,7 +21,7 @@
       }
     },
     "opacity": {
-      "value": 0.05,
+      "value": 0.5,
       "random": false,
       "anim": {
         "enable": true,
