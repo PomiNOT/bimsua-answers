@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import FadeTransition from './components/common-transitions/FadeTransition.vue';
+import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
 
 export default defineComponent({
   components: { FadeTransition },

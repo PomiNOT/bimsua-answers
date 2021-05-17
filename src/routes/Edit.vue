@@ -15,8 +15,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TwoEndsProgress from '../components/TwoEndsProgress.vue';
-import Editor from '../components/Editor.vue';
+import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
+import Editor from '@/components/Editor.vue';
 
 export default defineComponent({
   name: 'Edit',

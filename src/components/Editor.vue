@@ -30,9 +30,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Snackbar from './Snackbar.vue';
-import EditCard from './EditCard.vue';
-import FloatingMenu from './FloatingMenu.vue';
+import Snackbar from '@/components/Snackbar.vue';
+import EditCard from '@/components/EditCard.vue';
+import FloatingMenu from '@/components/FloatingMenu.vue';
 
 export default defineComponent({
   name: 'Editor',

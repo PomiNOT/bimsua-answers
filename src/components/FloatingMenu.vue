@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Flipper from './flip/Flipper.vue';
+import Flipper from '@/components/flip/Flipper.vue';
 
 export default defineComponent({
   name: 'FloatingMenu',

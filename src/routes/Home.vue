@@ -57,8 +57,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Illustration from '../components/Illustration.vue';
-import BounceTransition from '../components/common-transitions/BounceTransition.vue';
+import Illustration from '@/components/Illustration.vue';
+import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
 
 export default defineComponent({
   name: 'HomeScreen',
