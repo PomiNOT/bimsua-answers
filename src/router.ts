@@ -5,14 +5,17 @@ import View from './routes/View.vue';
 
 const routes = [
   {
+    name: 'Home',
     path: '/',
     component: Home 
   },
   {
+    name: 'Edit',
     path: '/edit',
     component: Edit
   },
   {
+    name: 'View',
     path: '/view',
     component: View
   }

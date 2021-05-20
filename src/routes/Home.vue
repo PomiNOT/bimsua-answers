@@ -36,19 +36,13 @@
         <div class="my-5 md:my-10">
           <div class="flex flex-col mb-5">
             <label class="input-label" for="name">Answer name</label>
-            <input type="text" id="name" placeholder="Name" class="input">
-          </div>
-          <div class="flex flex-col">
-            <label class="input-label" for="questions">Number of questions</label>
-            <input type="number" min="1" max="100" id="questions" placeholder="Number of questions" class="input">
+            <input type="text" id="name" v-model="sheetName" placeholder="Name" class="input">
           </div>
         </div>
         <div class="flex justify-center">
           <button type="button" class="btn btn-white" @click="showForm = false">Go back</button>
           <span class="mx-1"></span>
-          <router-link to="/edit">
-            <button type="button" class="btn">Let's go!</button>
-          </router-link>
+          <button type="button" class="btn" @click="createNew">Let's go!</button>
         </div>
       </form>
     </bounce-transition>
@@ -64,7 +58,18 @@ export default defineComponent({
   name: 'HomeScreen',
   components: { Illustration, BounceTransition },
   data: () => ({
-    showForm: false
-  })
+    showForm: false,
+    sheetName: 'My Amazing Answers'
+  }),
+  methods: {
+    createNew() {
+      this.$router.push({
+        name: 'Edit',
+        params: {
+          name: this.sheetName
+        }
+      });
+    }
+  }
 });
 </script>

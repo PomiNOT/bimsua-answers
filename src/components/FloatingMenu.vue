@@ -1,29 +1,23 @@
 <template>
-  <flipper :flip-key="expanded">
+  <flipper :flip-key="{ expanded, page }">
     <div class="fixed w-full flex justify-center z-50 bottom-7 left-0" v-if="!expanded">
       <button
         data-flip-key="dialog"
         type="button"
-        @click="expanded = true"
+        @click="$emit('update:expanded', true)"
         class="
           px-5 py-2 rounded-full
           bg-gray-600 font-bold text-white
           bg-opacity-50 focus:outline-none focus:bg-opacity-90 backdrop-filter backdrop-blur-lg
         "
       >
-        Menu
+        {{ buttonName }}
       </button>
     </div>
-    <div class="fixed px-2 top-0 left-0 z-50 w-full h-full grid place-items-center" v-else>
-      <div data-flip-key="dialog" class="p-5 overflow-hidden bg-gray-600 bg-opacity-75 rounded-lg backdrop-filter backdrop-blur-lg">
-        <div data-inverse-flip>
-          <h1 class="text-xl font-bold text-white">Action Menu</h1>
-          <p class="text-gray-200 text-sm">Chooose an action to do to this answer sheet</p>
-          <div class="flex flex-col my-6 space-y-2">
-            <button type="button" class="dialog-button" @click="$router.push('/')">Save and return</button>
-            <button type="button" class="dialog-button" @click="$router.push('/')">Discard this sheet</button>
-            <button type="button" class="dialog-button" @click="expanded = false">Return</button>
-          </div>
+    <div class="fixed bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg px-2 top-0 left-0 z-50 w-full h-full grid place-items-center" v-else>
+      <div data-flip-key="dialog" class="p-5 w-full sm:w-96 overflow-hidden bg-gray-600 bg-opacity-60 rounded-lg">
+        <div ref="pageList" data-inverse-flip>
+          <slot></slot>
         </div>
       </div>
     </div>
@@ -36,16 +30,40 @@ import Flipper from '@/components/flip/Flipper.vue';
 
 export default defineComponent({
   name: 'FloatingMenu',
+  emits: ['update:expanded'],
+  props: {
+    expanded: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    buttonName: {
+      type: String,
+      required: true
+    },
+    page: {
+      type: String,
+      required: false,
+      default: 'main'
+    }
+  },
   components: { Flipper },
-  data: () => ({
-    expanded: false
-  })
+  methods: {
+    updateShowHide() {
+      const pageList = this.$refs.pageList as HTMLElement;
+      pageList.querySelectorAll('.floating-menu-page[data-page]').forEach(child => {
+        if (child.dataset.page == this.page) {
+          child.classList.remove('hidden');
+        } else {
+          child.classList.add('hidden');
+        }
+      });
+    }
+  },
+  updated() {
+    if (this.expanded) {
+      this.updateShowHide();
+    }
+  }
 });
 </script>
-
-<style scoped>
-.dialog-button {
-  @apply text-white border border-gray-400 py-1 px-2 rounded;
-  @apply hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25;
-}
-</style>
