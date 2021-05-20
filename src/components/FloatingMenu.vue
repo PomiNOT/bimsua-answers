@@ -52,10 +52,12 @@ export default defineComponent({
     updateShowHide() {
       const pageList = this.$refs.pageList as HTMLElement;
       pageList.querySelectorAll('.floating-menu-page[data-page]').forEach(child => {
-        if (child.dataset.page == this.page) {
-          child.classList.remove('hidden');
+        let cElement = child as HTMLElement;
+
+        if (cElement.dataset.page == this.page) {
+          cElement.classList.remove('hidden');
         } else {
-          child.classList.add('hidden');
+          cElement.classList.add('hidden');
         }
       });
     }
