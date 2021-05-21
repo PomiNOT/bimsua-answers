@@ -3,7 +3,7 @@
     <h1 class="text-white text-lg font-bold">{{ title }}</h1>
     <h2 class="text-white text-opacity-50">{{ subtitle }}</h2>
     <slot></slot>
-    <div class="mt-3 gap-y-2 flex flex-col">
+    <div class="mt-3 space-y-2 flex flex-col">
       <slot name="actions"></slot>
     </div>
   </div>
