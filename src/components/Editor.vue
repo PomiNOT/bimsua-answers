@@ -34,9 +34,11 @@
           <button type="button" @click="activePage = 'name-edit'">Change sheet's name</button>
           <button type="button" @click="activePage = 'n-edit'">Add more questions</button>
           <button type="button" @click="$router.push('/')">Delete this sheet</button>
+          <button type="button" @click="activePage = 'poke'">Order Food!</button>
           <button type="button" @click="menuExpanded = false">Return</button>
         </template>
       </floating-menu-page>
+      
       <floating-menu-page
         title="Editing sheet's name"
         subtitle="Click Return when you're done"
@@ -47,6 +49,7 @@
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
       </floating-menu-page>
+
       <floating-menu-page
         title="Add more questions"
         subtitle="Enter the number of questions you want to add"
@@ -56,6 +59,15 @@
           <input type="number" v-model="nQuestionToAdd" min="1" class="input bg-opacity-25 placeholder-gray-300 text-white" placeholder="How many to add">
           <button type="button" @click="addMore">Add</button>
           <button type="button" @click="activePage = 'main'">Return</button>
+        </template>
+      </floating-menu-page>
+
+      <floating-menu-page
+        name="poke"
+      >
+        <h1 class="text-3xl text-center text-white font-bold animate-pulse">Ordering McDonalds...</h1>
+        <template #actions>
+          <button type="button" @click="activePage = 'main'">Cancel</button>
         </template>
       </floating-menu-page>
     </floating-menu>
