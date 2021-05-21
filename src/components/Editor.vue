@@ -15,14 +15,29 @@
       </div>
     </header>
 
-    <div class="grid sm:h-full sm:overflow-x-auto sm:grid-flow-col gap-y-2 gap-x-6 px-2 pb-20 sm:pb-16 pt-16 editor-rows">
-      <edit-card
-        v-for="q in sheet"
-        :question="q.question"
-        v-model:answer="q.answer"
-        :key="q.question"
-      />
-    </div>
+    <div class="h-10">&nbsp;</div>
+    <div class="h-18">&nbsp;</div>
+
+    <grid
+      :length="nQuestion" 
+      :pageProvider="providerFn"
+      :pageSize="pageSize"
+      class="grid gap-2 px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    >
+      <template #probe>
+        <edit-card :question="1" answer="A" />
+      </template>
+
+      <template v-slot:default="{ item, style }">
+        <edit-card :style="style" :question="item.question" v-model:answer="item.answer" />
+      </template>
+
+      <template v-slot:placeholder="{ item, style }">
+        <div :style="style" class="bg-gray-200 animate-pulse rounded-lg">{{ item }}</div>
+      </template>
+    </grid>
+
+    <div class="h-24">&nbsp;</div>
 
     <floating-menu buttonName="Menu" :page="activePage" v-model:expanded="menuExpanded">
       <floating-menu-page
@@ -45,19 +60,19 @@
         name="name-edit"
       >
         <template #actions>
-          <input type="text" v-model="name" class="input bg-opacity-25 placeholder-gray-300 text-white" placeholder="New name">
+          <input type="text" v-model="name" class="input" placeholder="New name">
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
       </floating-menu-page>
 
       <floating-menu-page
         title="Add more questions"
-        subtitle="Enter the number of questions you want to add"
+        subtitle="Currently locked to adding 100"
         name="n-edit"
       >
         <template #actions>
-          <input type="number" v-model="nQuestionToAdd" min="1" class="input bg-opacity-25 placeholder-gray-300 text-white" placeholder="How many to add">
-          <button type="button" @click="addMore">Add</button>
+          <input type="number" disabled v-model="nQuestionToAdd" min="1" class="input" placeholder="How many to add">
+          <button type="button" @click="addMore(); menuExpanded = false">Add</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
       </floating-menu-page>
@@ -80,17 +95,19 @@ import Snackbar from '@/components/Snackbar.vue';
 import EditCard from '@/components/EditCard.vue';
 import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
+import Grid from 'vue-virtual-scroll-grid';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage },
+  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, Grid },
   data: () => ({
     sheet: [] as any[],
-    nQuestion: 20,
+    nQuestion: 200,
     name: '',
     menuExpanded: false,
     activePage: 'main',
-    nQuestionToAdd: 1
+    nQuestionToAdd: 100,
+    pageSize: 10
   }),
   methods: {
     addMore() {
@@ -104,10 +121,15 @@ export default defineComponent({
           answer: answerMap[this.nQuestion % 4]
         });
       }
+    },
+    async providerFn(currentPage: number, pageSize: number): Promise<any[]> { 
+      const from = currentPage * pageSize;
+      const to = Math.min(this.nQuestion, (currentPage + 1) * pageSize);
+      return this.sheet.slice(from, to);
     }
   },
   mounted() {
-    this.name = this.$route.params.name as string;
+    this.name = this.$route.params.name as string ?? 'My Amazing Answers';
 
     const answerMap = ['A', 'B', 'C', 'D'];
 

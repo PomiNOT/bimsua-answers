@@ -37,4 +37,8 @@ export default defineComponent({
   @apply text-white border border-gray-400 py-1 px-2 rounded;
   @apply hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25;
 }
+
+.floating-menu-page input.input {
+  @apply bg-opacity-25 placeholder-gray-300 text-white;
+}
 </style>

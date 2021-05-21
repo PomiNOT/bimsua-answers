@@ -67,10 +67,10 @@ export default defineComponent({
 }
 
 .selected {
-    @apply text-white relative;
+    @apply text-white bg-green-500 relative;
 }
 
-.selected::before {
+.selected:focus:before {
     content: "";
     position: absolute;
     width: 100%;
