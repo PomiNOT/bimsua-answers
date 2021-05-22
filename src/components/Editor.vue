@@ -18,24 +18,22 @@
     <div class="h-10">&nbsp;</div>
     <div class="h-18">&nbsp;</div>
 
-    <grid
-      :length="nQuestion" 
-      :pageProvider="providerFn"
-      :pageSize="pageSize"
-      class="grid gap-2 px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    <recycle-scroller
+      :items="sheet.slice(0, Math.ceil(sheet.length / columns))"
+      :item-size="84"
+      key-field="question"
+      page-mode
+      class="px-2"
+      v-slot="{ index }"
     >
-      <template #probe>
-        <edit-card :question="1" answer="A" />
-      </template>
-
-      <template v-slot:default="{ item, style }">
-        <edit-card :style="style" :question="item.question" v-model:answer="item.answer" />
-      </template>
-
-      <template v-slot:placeholder="{ item, style }">
-        <div :style="style" class="bg-gray-200 animate-pulse rounded-lg">{{ item }}</div>
-      </template>
-    </grid>
+      <div class="p-1 gap-x-2 grid" :class="`grid-cols-${columns}`">
+        <edit-card
+          v-for="i in indices(index * columns, (index + 1) * columns)"
+          :question="sheet[i].question" v-model:answer="sheet[i].answer"
+          :key="sheet[i].question"
+        />
+      </div>
+    </recycle-scroller>
 
     <div class="h-24">&nbsp;</div>
 
@@ -67,11 +65,19 @@
 
       <floating-menu-page
         title="Add more questions"
-        subtitle="Currently locked to adding 100"
+        :subtitle="`Isn't ${nQuestion} enough?`"
         name="n-edit"
       >
         <template #actions>
-          <input type="number" disabled v-model="nQuestionToAdd" min="1" class="input" placeholder="How many to add">
+          <input
+            type="number"
+            v-model="nQuestionToAdd" min="1" class="input" placeholder="How many to add"
+          >
+          <fade-transition>
+            <p class="text-white text-opacity-70" v-if="nQuestion > 500">
+              It's already too much dude!
+            </p>
+          </fade-transition>
           <button type="button" @click="addMore(); menuExpanded = false">Add</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
@@ -95,19 +101,19 @@ import Snackbar from '@/components/Snackbar.vue';
 import EditCard from '@/components/EditCard.vue';
 import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
-import Grid from 'vue-virtual-scroll-grid';
+import FadeTransition from './common-transitions/FadeTransition.vue';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, Grid },
+  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition },
   data: () => ({
     sheet: [] as any[],
-    nQuestion: 200,
+    nQuestion: 69,
     name: '',
     menuExpanded: false,
     activePage: 'main',
-    nQuestionToAdd: 100,
-    pageSize: 10
+    nQuestionToAdd: 1,
+    columns: 2
   }),
   methods: {
     addMore() {
@@ -118,28 +124,42 @@ export default defineComponent({
 
         this.sheet.push({
           question: this.nQuestion,
-          answer: answerMap[this.nQuestion % 4]
+          answer: ''
         });
       }
     },
-    async providerFn(currentPage: number, pageSize: number): Promise<any[]> { 
-      const from = currentPage * pageSize;
-      const to = Math.min(this.nQuestion, (currentPage + 1) * pageSize);
-      return this.sheet.slice(from, to);
+    indices(from: number, to: number): number[] {
+      to = Math.min(to, this.sheet.length);
+      return Array.from({length: to - from}, (_, i) => from + i);
+    },
+    resize() {
+      if (window.innerWidth < 640) {
+        this.columns = 1;
+      } else if (window.innerWidth < 1024) {
+        this.columns = 2;
+      } else if (window.innerWidth < 1280) {
+        this.columns = 3;
+      } else {
+        this.columns = 4;
+      }
     }
   },
   mounted() {
     this.name = this.$route.params.name as string ?? 'My Amazing Answers';
 
-    const answerMap = ['A', 'B', 'C', 'D'];
-
     for (let i = 0; i < this.nQuestion; i++) {
       this.sheet.push({
         question: i + 1,
-        answer: answerMap[i % 4]
+        answer: ''
       });
     }
+
+    window.addEventListener('resize', this.resize);
+    this.resize();
   },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
 });
 </script>
 
