@@ -1,5 +1,10 @@
 module.exports = {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  purge: {
+    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+    options: {
+      safelist: ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4']
+    }
+  },
   darkMode: false,
   theme: {
     minWidth: {
