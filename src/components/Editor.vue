@@ -7,7 +7,7 @@
     >
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">{{ name }}</h1>
-        <p class="text-gray-500">{{ sheet.length }} questions</p>
+        <p class="text-gray-500">{{ nQuestion }} questions</p>
       </div>
       <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
         <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
@@ -18,22 +18,20 @@
     <div class="h-10">&nbsp;</div>
     <div class="h-18">&nbsp;</div>
 
-    <recycle-scroller
-      :items="sheet.slice(0, Math.ceil(sheet.length / columns))"
-      :item-size="84"
-      key-field="question"
-      page-mode
-      class="px-2"
-      v-slot="{ index }"
+    <virtual-list
+      :length="Math.ceil(nQuestion / columns)"
+      :item-height="82"
     >
-      <div class="p-1 gap-x-2 grid" :class="`grid-cols-${columns}`">
-        <edit-card
-          v-for="i in indices(index * columns, (index + 1) * columns)"
-          :question="sheet[i].question" v-model:answer="sheet[i].answer"
-          :key="sheet[i].question"
-        />
-      </div>
-    </recycle-scroller>
+      <template v-slot="{ index }">
+        <div class="p-1 gap-x-2 grid" :class="`grid-cols-${columns}`">
+          <edit-card
+            v-for="i in indices(index * columns, (index + 1) * columns)"
+            :question="i + 1" :answer="sheet[i + 1] ?? ''" @update:answer="updateAnswer"
+            :key="i"
+          />
+        </div>
+      </template>
+    </virtual-list>
 
     <div class="h-24">&nbsp;</div>
 
@@ -102,12 +100,18 @@ import EditCard from '@/components/EditCard.vue';
 import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import FadeTransition from './common-transitions/FadeTransition.vue';
+import VirtualList from '@/components/VirtualList.vue';
+
+interface Answer {
+  question: number,
+  answer: string
+}
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition },
+  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
   data: () => ({
-    sheet: [] as any[],
+    sheet: {} as any,
     nQuestion: 69,
     name: '',
     menuExpanded: false,
@@ -117,19 +121,10 @@ export default defineComponent({
   }),
   methods: {
     addMore() {
-      const answerMap = ['A', 'B', 'C', 'D'];
-
-      for (let i = 0; i < this.nQuestionToAdd; i++) {
-        this.nQuestion++;
-
-        this.sheet.push({
-          question: this.nQuestion,
-          answer: ''
-        });
-      }
+      this.nQuestion += this.nQuestionToAdd;
     },
     indices(from: number, to: number): number[] {
-      to = Math.min(to, this.sheet.length);
+      to = Math.min(to, this.nQuestion);
       return Array.from({length: to - from}, (_, i) => from + i);
     },
     resize() {
@@ -142,17 +137,13 @@ export default defineComponent({
       } else {
         this.columns = 4;
       }
+    },
+    updateAnswer(ans: Answer) {
+      this.sheet[ans.question] = ans.answer;
     }
   },
   mounted() {
     this.name = this.$route.params.name as string ?? 'My Amazing Answers';
-
-    for (let i = 0; i < this.nQuestion; i++) {
-      this.sheet.push({
-        question: i + 1,
-        answer: ''
-      });
-    }
 
     window.addEventListener('resize', this.resize);
     this.resize();

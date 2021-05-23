@@ -19,6 +19,7 @@ specifiers:
   vue: ^3.0.5
   vue-router: ^4.0.6
   vue-tsc: ^0.0.24
+  vue-virtual-scroll-list: ^2.3.2
   vue-virtual-scroller: ^2.0.0-alpha.1
 
 dependencies:
@@ -29,6 +30,7 @@ dependencies:
   tsparticles: 1.27.0
   vue: 3.0.11
   vue-router: 4.0.6_vue@3.0.11
+  vue-virtual-scroll-list: 2.3.2
   vue-virtual-scroller: 2.0.0-alpha.1_vue@3.0.11
 
 devDependencies:
@@ -1769,6 +1771,10 @@ packages:
     dependencies:
       unzipper: 0.10.11
     dev: true
+
+  /vue-virtual-scroll-list/2.3.2:
+    resolution: {integrity: sha512-afm5bYgjJRK160KXlvs03dsPixEL/gS8sV5DKxEDRjPQKMXjIBmTMN/hMTEyazsPl+G4tXQs/msYK7p7tNVogQ==}
+    dev: false
 
   /vue-virtual-scroller/2.0.0-alpha.1_vue@3.0.11:
     resolution: {integrity: sha512-Mn5w3Qe06t7c3Imm2RHD43RACab1CCWplpdgzq+/FWJcpQtcGKd5vDep8i+nIwFtzFLsWAqEK0RzM7KrfAcBng==}

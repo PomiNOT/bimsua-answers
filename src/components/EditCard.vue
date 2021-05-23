@@ -46,7 +46,10 @@ export default defineComponent({
     },
     methods: {
         update(newAnswer: string) {
-            this.$emit('update:answer', newAnswer);
+            this.$emit('update:answer', { 
+                question: this.question,
+                answer: newAnswer
+            });
         }
     }
 });
