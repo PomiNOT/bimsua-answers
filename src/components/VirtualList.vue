@@ -1,5 +1,8 @@
 <script lang="ts">
+//Virtual List that listens on the page for scroll events.
+
 import { defineComponent, h } from 'vue';
+import ScrollParent from 'scrollparent';
 
 export default defineComponent({
   name: 'VirtualList',
@@ -19,25 +22,41 @@ export default defineComponent({
     }
   },
   data: () => ({
-    visibleItems: [] as number[]
+    visibleItems: [] as number[],
+    scrollTarget: null as null | any
   }),
   methods: {
+    clamp(value: number, min: number, max: number): number {
+      return Math.min(Math.max(value, min), max);
+    },
     updateVisibleItems() {
       const windowHeight = window.innerHeight;
       const { scrollTop } = document.documentElement;
 
       const containerStart = (this.$el as HTMLElement).offsetTop;
-      const containerEnd = containerStart + this.itemHeight * this.length;
+      const containerHeight = this.length * this.itemHeight;
 
-      const windowStart = Math.max(scrollTop - containerStart - this.bufferHeight, 0);
-      const windowEnd = Math.min(scrollTop + windowHeight + this.bufferHeight, containerEnd);
+      const windowStart = this.clamp(scrollTop - this.bufferHeight - containerStart, 0, containerHeight);
+      const windowEnd = this.clamp(scrollTop + windowHeight + this.bufferHeight - containerStart, 0, containerHeight);
       const windowSize = windowEnd - windowStart;
 
-      const visibleCount = Math.floor(windowSize / this.itemHeight);
+      const visibleCount = Math.floor(windowSize / this.itemHeight) + 1;
       const startIndex = Math.floor(windowStart / this.itemHeight);
       
       this.visibleItems = Array.from({ length: visibleCount }, (_, i) => startIndex + i);
+    },
+
+    //Taken from https://github.com/Akryum/vue-virtual-scroller/blob/master/src/components/RecycleScroller.vue line 493
+    getListenerTarget () {
+      let target: any = ScrollParent(this.$el);
+      // Fix global scroll target for Chrome and Safari
+      if (window.document && (target === window.document.documentElement || target === window.document.body)) {
+        target = window;
+      }
+
+      this.scrollTarget = target;
     }
+
   },
   render() {
     const listHeight = this.itemHeight * this.length;
@@ -65,12 +84,14 @@ export default defineComponent({
   },
   mounted() {
     this.updateVisibleItems();
+    this.getListenerTarget();
+
     window.addEventListener('resize', this.updateVisibleItems);
-    window.addEventListener('scroll', this.updateVisibleItems, { passive: true });
+    this.scrollTarget.addEventListener('scroll', this.updateVisibleItems, { passive: true });
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.updateVisibleItems);
-    window.removeEventListener('scroll', this.updateVisibleItems);
+    this.scrollTarget.removeEventListener('scroll', this.updateVisibleItems);
   }
 });
 </script>
