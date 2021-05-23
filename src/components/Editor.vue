@@ -69,7 +69,7 @@
         <template #actions>
           <input
             type="number"
-            v-model="nQuestionToAdd" min="1" class="input" placeholder="How many to add"
+            v-model.number="nQuestionToAdd" min="1" class="input" placeholder="How many to add"
           >
           <fade-transition>
             <p class="text-white text-opacity-70" v-if="nQuestion > 500">
