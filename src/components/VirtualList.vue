@@ -31,7 +31,7 @@ export default defineComponent({
     },
     updateVisibleItems() {
       const windowHeight = window.innerHeight;
-      const { scrollTop } = document.documentElement;
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
       const containerStart = (this.$el as HTMLElement).offsetTop;
       const containerHeight = this.length * this.itemHeight;
