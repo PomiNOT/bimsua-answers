@@ -151,7 +151,7 @@ export default defineComponent({
   computed: {
     shareLink(): string {
       const loc = window.location;
-      return `${loc.protocol}://${loc.hostname}/view/${this.id}`;
+      return `${loc.protocol}//${loc.hostname}/view/${this.id}`;
     }
   },
   methods: {
