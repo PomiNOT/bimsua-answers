@@ -17,9 +17,9 @@
               <fade-transition appear class="delay-200">
                 <div data-inverse-flip>
                   <h1 class="text-xl md:text-2xl font-bold text-red-700">
-                    An error occurred
+                    Whooops!
                   </h1>
-                  <p class="text-blue-800 text-md">Your answer sheet was damaged on the way to you, please try again.</p>
+                  <p class="text-blue-800 text-md">Maybe it was not found, maybe something happened.</p>
                 </div>
               </fade-transition>
             </div>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <viewer v-else />
+    <viewer :nQuestion="nQuestion" :name="name" :sheet="sheet" v-else />
   </transition>
 </template>
 
@@ -38,16 +38,45 @@ import Illustration from '@/components/Illustration.vue';
 import Viewer from '@/components/Viewer.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
+import firebase from '@/firebase';
 
 export default defineComponent({
   name: 'View',
   components: { Illustration, Viewer, Flipper, FadeTransition },
   data: () => ({
     loadingDone: false,
-    hasError: false
+    hasError: false,
+    sheet: {} as any,
+    nQuestion: 0,
+    name: 'My Amazing Answers'
   }),
-  mounted() {
-    setTimeout(() => this.loadingDone = true, 2000);
+  async mounted() {
+    const id = this.$route.params.id;
+    const pathRefSnapshot = await firebase.firestore().doc(`/sheet_refs/${id}`).get();
+    const pathRefData = await pathRefSnapshot.data();
+
+    if (!pathRefData) {
+      this.hasError = true;
+      return;
+    }
+
+    firebase
+      .firestore()
+      .doc(pathRefData.path)
+      .onSnapshot(snap => {
+        const doc = snap.data();
+
+        this.sheet = doc?.sheet;
+        this.name = doc?.name;
+        this.nQuestion = doc?.nQuestion;
+
+        this.loadingDone = true;
+
+        if (!snap.exists) {
+          this.loadingDone = false;
+          this.hasError = true;
+        }
+      });
   }
 });
 </script>

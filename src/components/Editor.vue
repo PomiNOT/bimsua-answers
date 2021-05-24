@@ -19,17 +19,18 @@
     <div class="h-18">&nbsp;</div>
 
     <virtual-list
-      :length="Math.ceil(nQuestion / columns)"
+      :length="nQuestion"
       :item-height="82"
+      :gap="5"
+      :cols="1"
+      :cols-sm="2"
+      :cols-md="3"
+      :cols-xl="4"
     >
       <template v-slot="{ index }">
-        <div class="p-1 gap-x-2 grid" :class="`grid-cols-${columns}`">
-          <edit-card
-            v-for="i in indices(index * columns, (index + 1) * columns)"
-            :question="i + 1" :answer="sheet[i + 1] ?? ''" @update:answer="updateAnswer"
-            :key="i"
-          />
-        </div>
+        <edit-card
+          :question="index + 1" :answer="sheet[index + 1] ?? ''" @update:answer="updateAnswer"
+        />
       </template>
     </virtual-list>
 
@@ -42,6 +43,7 @@
         name="main"
       >
         <template #actions>
+          <button type="button" @click="activePage = 'share-sheet'; copied = false;">Share this sheet</button>
           <button type="button" @click="activePage = 'name-edit'; newName = name">Change sheet's name</button>
           <button type="button" @click="activePage = 'n-edit'; newnQuestion = nQuestion">Edit sheet length</button>
           <button type="button" @click="activePage = 'delete-confirm'">Delete this sheet</button>
@@ -91,6 +93,17 @@
           <button type="button" @click="activePage = 'main'">Cancel</button>
         </template>
       </floating-menu-page>
+
+      <floating-menu-page
+        name="share-sheet"
+        title="Share sheet"
+        subtitle="Copy link to clipboard"
+      >
+        <template #actions>
+          <button type="button" @click="copyLink">{{ copied ? 'Copied!' : 'Copy' }}</button>
+          <button type="button" @click="activePage = 'main'">Cancel</button>
+        </template>
+      </floating-menu-page>
     </floating-menu>
   </div>
 </template>
@@ -103,12 +116,12 @@ import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import FadeTransition from './common-transitions/FadeTransition.vue';
 import VirtualList from '@/components/VirtualList.vue';
-import { Answer } from '@/types';
+import copy from 'copy-to-clipboard';
 
 export default defineComponent({
   name: 'Editor',
   components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
-  emits: ['update:answer', 'update:nQuestion', 'update:name', 'deleteSheet'],
+  emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet'],
   props: {
     sheet: {
       type: Object,
@@ -121,58 +134,44 @@ export default defineComponent({
     name: {
       type: String,
       required: true
+    },
+    id: {
+      type: String,
+      required: true
     }
   },
   data: () => ({
     menuExpanded: false,
     activePage: 'main',
-    columns: 2,
     newnQuestion: 0,
     newName: '',
-    deleting: false
+    deleting: false,
+    copied: false
   }),
+  computed: {
+    shareLink(): string {
+      const loc = window.location;
+      return `${loc.protocol}://${loc.hostname}/view/${this.id}`;
+    }
+  },
   methods: {
-    indices(from: number, to: number): number[] {
-      to = Math.min(to, this.nQuestion);
-      return Array.from({length: to - from}, (_, i) => from + i);
-    },
-    resize() {
-      if (window.innerWidth < 640) {
-        this.columns = 1;
-      } else if (window.innerWidth < 1024) {
-        this.columns = 2;
-      } else if (window.innerWidth < 1280) {
-        this.columns = 3;
-      } else {
-        this.columns = 4;
-      }
-    },
-    updateAnswer(ans: Answer) {
-      this.$emit('update:answer', ans);
+    updateAnswer(ans: any) {
+      this.$emit('answerUpdate', ans);
     },
     updateNQuestion() {
-      this.$emit('update:nQuestion', this.newnQuestion);
+      this.$emit('nQuestionUpdate', this.newnQuestion);
     },
     updateName() {
-      this.$emit('update:name', this.newName);
+      this.$emit('nameUpdate', this.newName);
     },
     deleteSheet() {
       this.$emit('deleteSheet');
       this.deleting = true;
+    },
+    copyLink() {
+      copy(this.shareLink);
+      this.copied = true;
     }
-  },
-  mounted() {
-    window.addEventListener('resize', this.resize);
-    this.resize();
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.resize);
   }
 });
 </script>
-
-<style scoped>
-.editor-rows {
-  grid-template-rows: repeat(auto-fit, minmax(70px, 1fr));
-}
-</style>

@@ -14,9 +14,10 @@
     :nQuestion="nQuestion"
     :sheet="sheet"
     :name="name"
-    @update:nQuestion="updateNQuestion"
-    @update:answer="updateAnswer"
-    @update:name="updateName"
+    :id="id"
+    @nQuestionUpdate="updateNQuestion"
+    @answerUpdate="updateAnswer"
+    @nameUpdate="updateName"
     @deleteSheet="deleteSheet"
     v-else
   />
@@ -30,7 +31,6 @@ import Editor from '@/components/Editor.vue';
 import firebase from '@/firebase';
 import localForage from 'localforage';
 import genid from 'genid';
-import { Answer } from '@/types';
 
 const ID_LENGTH = 20;
 
@@ -57,7 +57,7 @@ export default defineComponent({
               .doc(this.getPathForSheet())
               .update({ nQuestion: newnQuestion });
     },
-    async updateAnswer(ans: Answer) {
+    async updateAnswer(ans: any) {
       await firebase
               .firestore()
               .doc(this.getPathForSheet())
@@ -72,7 +72,13 @@ export default defineComponent({
               .update({ name: newName });
     },
     async deleteSheet() {
-      await firebase.firestore().doc(this.getPathForSheet()).delete();
+      let batch = firebase.firestore().batch();
+
+      batch.delete(firebase.firestore().doc(this.getPathForSheet()));
+      batch.delete(firebase.firestore().doc(`/sheet_refs/${this.id}`));
+
+      await batch.commit();
+
       this.$router.push('/');
     },
     getPathForSheet() {
@@ -110,6 +116,14 @@ export default defineComponent({
           nQuestion: this.nQuestion,
           sheet: {}
         });
+
+      await firebase
+            .firestore()
+            .doc(`/sheet_refs/${this.id}`)
+            .set({
+              path: this.getPathForSheet(),
+              createdBy: firebase.auth().currentUser?.uid
+            });
     }
 
     firebase

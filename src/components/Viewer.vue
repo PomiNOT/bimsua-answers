@@ -6,12 +6,20 @@
               sm:border-blue-200 sm:w-3/4 md:w-2/3 lg:w-1/2 rounded-lg animate-slidein"
     >
       <div class="mb-4 sm:mb-5">
-        <h1 class="text-2xl font-bold text-blue-800">How the Universe works</h1>
-        <p class="text-gray-500">{{ sheet.length }} questions</p>
+        <h1 class="text-2xl font-bold text-blue-800">{{ name }}</h1>
+        <p class="text-gray-500">{{ nQuestion }} questions</p>
       </div>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-        <view-card v-for="ans in sheet" :question="ans.question" :answer="ans.answer" :key="ans.question"/>
-      </div>
+      <virtual-list
+        :length="nQuestion"
+        :item-height="86"
+        :cols="3"
+        :colsSm="5"
+        :gap="6"
+      >
+        <template v-slot="{ index }">
+          <view-card :question="index + 1" :answer="sheet[index + 1] ?? '...'" />
+        </template>
+      </virtual-list>
     </div>
     <div
       class="fixed bg-gradient-to-b transition-opacity duration-300 w-full h-full top-0 left-0"
@@ -25,13 +33,26 @@
 import { defineComponent } from 'vue';
 import { tsParticles } from 'tsparticles';
 import ViewCard from '@/components/ViewCard.vue';
-import firebase from '@/firebase';
+import VirtualList from '@/components/VirtualList.vue';
 
 export default defineComponent({
   name: 'Viewer',
-  components: { ViewCard },
+  components: { ViewCard, VirtualList },
+  props: {
+    nQuestion: {
+      type: Number,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    sheet: {
+      type: Object,
+      required: true
+    }
+  },
   data: () => ({
-    sheet: [] as any[],
     showBackground: false
   }),
   async mounted() {
