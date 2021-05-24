@@ -11,10 +11,11 @@
           <div class="mt-6">
             <button type="button" @click="showForm = true" class="btn">Create new!</button>
           </div>
-          <div class="mt-6">
-            <a class="text-blue-600" href="https://bimsua.me/privacy">Terms of use</a>
-            <span class="mx-3">|</span>
-            <a class="text-blue-600" href="https://bimsua.me/privacy">Privacy Policy</a>
+          <div class="mt-6 text-center">
+            <p class="text-gray-400">{{ new Date().getFullYear() }}, bimsua Studios</p>
+            <p class="text-gray-400">
+              <a class="underline" href="https://github.com/bimsuastudios/bimsua-answers">Software</a> licensed under MIT License.
+            </p>
           </div>
         </div>
       </div>
@@ -38,6 +39,10 @@
             <label class="input-label" for="name">Answer name</label>
             <input type="text" id="name" v-model="sheetName" placeholder="Name" class="input">
           </div>
+          <div class="flex flex-col">
+            <label class="input-label" for="questions">Number of questions</label>
+            <input type="number" min="1" max="100" v-model.number="nQuestion" placeholder="Number of questions" class="input">
+          </div>
         </div>
         <div class="flex justify-center">
           <button type="button" class="btn btn-white" @click="showForm = false">Go back</button>
@@ -59,14 +64,17 @@ export default defineComponent({
   components: { Illustration, BounceTransition },
   data: () => ({
     showForm: false,
-    sheetName: 'My Amazing Answers'
+    sheetName: 'My Amazing Answers',
+    nQuestion: 5
   }),
   methods: {
     createNew() {
       this.$router.push({
         name: 'Edit',
         params: {
-          name: this.sheetName
+          name: this.sheetName,
+          nQuestion: this.nQuestion,
+          creating: 'true'
         }
       });
     }

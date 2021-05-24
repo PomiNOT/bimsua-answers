@@ -10,6 +10,8 @@ specifiers:
   dotenv: ^9.0.2
   firebase: ^8.6.1
   flip-toolkit: ^7.0.13
+  genid: ^0.1.0
+  localforage: ^1.9.0
   lodash.isequal: ^4.5.0
   postcss: ^8.2.10
   postcss-viewport-height-correction: ^1.1.1
@@ -26,6 +28,8 @@ dependencies:
   '@tailwindcss/aspect-ratio': 0.2.0
   firebase: 8.6.1
   flip-toolkit: 7.0.13
+  genid: 0.1.0
+  localforage: 1.9.0
   lodash.isequal: 4.5.0
   scrollparent: 2.0.1
   tsparticles: 1.27.0
@@ -989,6 +993,10 @@ packages:
       loader-utils: 1.4.0
     dev: true
 
+  /genid/0.1.0:
+    resolution: {integrity: sha1-QgeB/vIszD1lSxdTI1BXTOl7WNk=}
+    dev: false
+
   /glob-base/0.3.0:
     resolution: {integrity: sha1-27Fk9iIbHAscz4Kuoyi0l98Oo8Q=}
     engines: {node: '>=0.10.0'}
@@ -1070,6 +1078,10 @@ packages:
 
   /idb/3.0.2:
     resolution: {integrity: sha512-+FLa/0sTXqyux0o6C+i2lOR0VoS60LU/jzUo5xjfY6+7sEEgy4Gz1O7yFBXvjd7N0NyIGWIRg8DcQSLEG+VSPw==}
+    dev: false
+
+  /immediate/3.0.6:
+    resolution: {integrity: sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=}
     dev: false
 
   /indexes-of/1.0.1:
@@ -1157,6 +1169,12 @@ packages:
       graceful-fs: 4.2.6
     dev: true
 
+  /lie/3.1.1:
+    resolution: {integrity: sha1-mkNrLMd0bKWd56QfpGmz77dr2H4=}
+    dependencies:
+      immediate: 3.0.6
+    dev: false
+
   /listenercount/1.0.1:
     resolution: {integrity: sha1-hMinKrWcRyUyFIDJdeZQg0LnCTc=}
     dev: true
@@ -1169,6 +1187,12 @@ packages:
       emojis-list: 3.0.0
       json5: 1.0.1
     dev: true
+
+  /localforage/1.9.0:
+    resolution: {integrity: sha512-rR1oyNrKulpe+VM9cYmcFn6tsHuokyVHFaCM3+osEmxaHTbEk8oQu6eGDfS6DQLWi/N67XRmB8ECG37OES368g==}
+    dependencies:
+      lie: 3.1.1
+    dev: false
 
   /lodash.camelcase/4.3.0:
     resolution: {integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=}

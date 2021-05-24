@@ -10,6 +10,8 @@
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "firebase": "^8.6.1",
     "flip-toolkit": "^7.0.13",
+    "genid": "^0.1.0",
+    "localforage": "^1.9.0",
     "lodash.isequal": "^4.5.0",
     "scrollparent": "^2.0.1",
     "tsparticles": "^1.27.0",

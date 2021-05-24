@@ -25,6 +25,7 @@
 import { defineComponent } from 'vue';
 import { tsParticles } from 'tsparticles';
 import ViewCard from '@/components/ViewCard.vue';
+import firebase from '@/firebase';
 
 export default defineComponent({
   name: 'Viewer',
@@ -34,15 +35,6 @@ export default defineComponent({
     showBackground: false
   }),
   async mounted() {
-    const answerMap = ['A', 'B', 'C', 'D'];
-
-    for (let i = 0; i < 80; i++) {
-      this.sheet.push({
-        question: i + 1,
-        answer: answerMap[i % 4]
-      });
-    }
-
     await tsParticles.loadJSON('particles', '/particles.json');
     this.showBackground = true;
   }

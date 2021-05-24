@@ -42,50 +42,52 @@
         name="main"
       >
         <template #actions>
-          <button type="button" @click="activePage = 'name-edit'">Change sheet's name</button>
-          <button type="button" @click="activePage = 'n-edit'">Add more questions</button>
-          <button type="button" @click="$router.push('/')">Delete this sheet</button>
-          <button type="button" @click="activePage = 'poke'">Order Food!</button>
+          <button type="button" @click="activePage = 'name-edit'; newName = name">Change sheet's name</button>
+          <button type="button" @click="activePage = 'n-edit'; newnQuestion = nQuestion">Edit sheet length</button>
+          <button type="button" @click="activePage = 'delete-confirm'">Delete this sheet</button>
           <button type="button" @click="menuExpanded = false">Return</button>
         </template>
       </floating-menu-page>
       
       <floating-menu-page
         title="Editing sheet's name"
-        subtitle="Click Return when you're done"
+        subtitle="Click Save when you're done"
         name="name-edit"
       >
         <template #actions>
-          <input type="text" v-model="name" class="input" placeholder="New name">
+          <input type="text" v-model="newName" class="input" placeholder="New name">
+          <button type="button" @click="updateName(); activePage = 'main'">Save</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
       </floating-menu-page>
 
       <floating-menu-page
-        title="Add more questions"
-        :subtitle="`Isn't ${nQuestion} enough?`"
+        title="Edit sheet length"
+        subtitle="Need more or less?"
         name="n-edit"
       >
         <template #actions>
           <input
             type="number"
-            v-model.number="nQuestionToAdd" min="1" class="input" placeholder="How many to add"
+            v-model.number="newnQuestion" min="1" class="input" placeholder="New sheet length"
           >
           <fade-transition>
             <p class="text-white text-opacity-70" v-if="nQuestion > 500">
               It's already too much dude!
             </p>
           </fade-transition>
-          <button type="button" @click="addMore(); menuExpanded = false">Add</button>
+          <button type="button" @click="updateNQuestion(); menuExpanded = false">Resize</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
       </floating-menu-page>
 
       <floating-menu-page
-        name="poke"
+        name="delete-confirm"
+        title="Are you sure to delete?"
+        subtitle="Your data will be lost forever"
       >
-        <h1 class="text-3xl text-center text-white font-bold animate-pulse">Ordering McDonalds...</h1>
         <template #actions>
+          <button type="button" @click="deleteSheet">{{ deleting ? 'Trashing...' : 'Delete' }}</button>
           <button type="button" @click="activePage = 'main'">Cancel</button>
         </template>
       </floating-menu-page>
@@ -101,28 +103,35 @@ import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import FadeTransition from './common-transitions/FadeTransition.vue';
 import VirtualList from '@/components/VirtualList.vue';
-
-interface Answer {
-  question: number,
-  answer: string
-}
+import { Answer } from '@/types';
 
 export default defineComponent({
   name: 'Editor',
   components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
+  emits: ['update:answer', 'update:nQuestion', 'update:name', 'deleteSheet'],
+  props: {
+    sheet: {
+      type: Object,
+      required: true
+    },
+    nQuestion: {
+      type: Number,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  },
   data: () => ({
-    sheet: {} as any,
-    nQuestion: 69,
-    name: '',
     menuExpanded: false,
     activePage: 'main',
-    nQuestionToAdd: 1,
-    columns: 2
+    columns: 2,
+    newnQuestion: 0,
+    newName: '',
+    deleting: false
   }),
   methods: {
-    addMore() {
-      this.nQuestion += this.nQuestionToAdd;
-    },
     indices(from: number, to: number): number[] {
       to = Math.min(to, this.nQuestion);
       return Array.from({length: to - from}, (_, i) => from + i);
@@ -139,12 +148,20 @@ export default defineComponent({
       }
     },
     updateAnswer(ans: Answer) {
-      this.sheet[ans.question] = ans.answer;
+      this.$emit('update:answer', ans);
+    },
+    updateNQuestion() {
+      this.$emit('update:nQuestion', this.newnQuestion);
+    },
+    updateName() {
+      this.$emit('update:name', this.newName);
+    },
+    deleteSheet() {
+      this.$emit('deleteSheet');
+      this.deleting = true;
     }
   },
   mounted() {
-    this.name = this.$route.params.name as string ?? 'My Amazing Answers';
-
     window.addEventListener('resize', this.resize);
     this.resize();
   },
