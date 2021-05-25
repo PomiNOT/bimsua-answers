@@ -48,7 +48,8 @@ export default defineComponent({
     hasError: false,
     sheet: {} as any,
     nQuestion: 0,
-    name: 'My Amazing Answers'
+    name: 'My Amazing Answers',
+    unsubscribe: null as Function | null
   }),
   async mounted() {
     const id = this.$route.params.id;
@@ -60,7 +61,7 @@ export default defineComponent({
       return;
     }
 
-    firebase
+    this.unsubscribe = firebase
       .firestore()
       .doc(pathRefData.path)
       .onSnapshot(snap => {
@@ -77,6 +78,9 @@ export default defineComponent({
           this.hasError = true;
         }
       });
+  },
+  beforeUnmount() {
+    this.unsubscribe?.();
   }
 });
 </script>

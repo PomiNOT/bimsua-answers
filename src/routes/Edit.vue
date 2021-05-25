@@ -43,7 +43,8 @@ export default defineComponent({
     nQuestion: 20,
     id: '',
     name: '',
-    sheet: {} as any
+    sheet: {} as any,
+    unsubscribe: null as Function | null
   }),
   computed: {
     stateToText(): string {
@@ -104,7 +105,10 @@ export default defineComponent({
       }
     }
 
-    await firebase.auth().signInAnonymously();
+    if (!firebase.auth().currentUser) {
+      await firebase.auth().signInAnonymously();
+    }
+    
     this.state++;
 
     if (creating) {
@@ -126,7 +130,7 @@ export default defineComponent({
             });
     }
 
-    firebase
+    this.unsubscribe = firebase
       .firestore()
       .doc(this.getPathForSheet())
       .onSnapshot(doc => {
@@ -138,6 +142,9 @@ export default defineComponent({
         this.name = docData?.name;
         this.nQuestion = docData?.nQuestion;
       });
+  },
+  beforeUnmount() {
+    this.unsubscribe?.();
   }
 });
 </script>
