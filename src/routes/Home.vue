@@ -8,12 +8,15 @@
             <h1 class="font-bold text-blue-800 text-3xl md:text-4xl">Answers!</h1>
             <p class="px-10 text-gray-500">Create and share your multiple choice answers <span class="underline font-bold">free</span>, no login required.</p>
           </div>
-          <div class="mt-6">
+          <div class="mt-6 space-x-2">
+            <button type="button" v-if="hasRecent" @click="$router.push('/edit')" class="btn btn-white">
+              Load recent
+            </button>
             <button type="button" @click="showForm = true" class="btn">Create new!</button>
           </div>
-          <div class="mt-6 text-center">
-            <p class="text-gray-400">{{ new Date().getFullYear() }}, bimsua Studios</p>
-            <p class="text-gray-400">
+          <div class="mt-6 text-xs text-center">
+            <p class="text-gray-300">{{ new Date().getFullYear() }}, bimsua Studios</p>
+            <p class="text-gray-300">
               <a class="underline" href="https://github.com/bimsuastudios/bimsua-answers">Software</a> licensed under MIT License.
             </p>
           </div>
@@ -44,9 +47,8 @@
             <input type="number" min="1" max="100" v-model.number="nQuestion" placeholder="Number of questions" class="input">
           </div>
         </div>
-        <div class="flex justify-center">
+        <div class="flex space-x-2 justify-center">
           <button type="button" class="btn btn-white" @click="showForm = false">Go back</button>
-          <span class="mx-1"></span>
           <button type="button" class="btn" @click="createNew">Let's go!</button>
         </div>
       </form>
@@ -58,6 +60,7 @@
 import { defineComponent } from 'vue';
 import Illustration from '@/components/Illustration.vue';
 import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
+import localForage from 'localforage';
 
 export default defineComponent({
   name: 'HomeScreen',
@@ -65,7 +68,8 @@ export default defineComponent({
   data: () => ({
     showForm: false,
     sheetName: 'My Amazing Answers',
-    nQuestion: 5
+    nQuestion: 5,
+    hasRecent: false
   }),
   methods: {
     createNew() {
@@ -78,6 +82,11 @@ export default defineComponent({
         }
       });
     }
+  },
+  async mounted() {
+    const retrievedId = await localForage.getItem('id');
+
+    this.hasRecent = !!retrievedId;
   }
 });
 </script>

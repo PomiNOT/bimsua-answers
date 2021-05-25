@@ -18,7 +18,7 @@ export default defineComponent({
     bufferHeight: {
       type: Number,
       required: false,
-      default: 768
+      default: 200
     },
     gap: {
       type: Number,
@@ -148,6 +148,7 @@ export default defineComponent({
           this.indices(rowIndex * this.columns, (rowIndex + 1) * this.columns).map(i => {
             return h(
               'div',
+              { key: i },
               this.$slots.default?.({ index: i })
             );
           })

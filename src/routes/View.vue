@@ -13,13 +13,13 @@
         <div class="transform scale-90 -rotate-12">
           <flipper :flip-key="hasError">
             <illustration v-if="!hasError" data-flip-key="asdasd" :animated="true" />
-            <div v-else data-flip-key="asdasd" class="rounded p-5 overflow-hidden bg-gray-300">
+            <div v-else data-flip-key="asdasd" class="rounded p-5 overflow-hidden bg-gray-200">
               <fade-transition appear class="delay-200">
                 <div data-inverse-flip>
-                  <h1 class="text-xl md:text-2xl font-bold text-red-700">
-                    Whooops!
+                  <h1 class="text-xl md:text-2xl font-bold text-blue-700">
+                    Not found 😢
                   </h1>
-                  <p class="text-blue-800 text-md">Maybe it was not found, maybe something happened.</p>
+                  <p class="text-blue-500 text-md">Well, there you go.</p>
                 </div>
               </fade-transition>
             </div>
@@ -44,8 +44,9 @@ import {
   onSnapshot,
   getFirestore
 } from 'firebase/firestore';
+import firebaseApp from '@/firebaseApp';
 
-const db = getFirestore();
+const db = getFirestore(firebaseApp);
 
 export default defineComponent({
   name: 'View',
@@ -78,7 +79,7 @@ export default defineComponent({
 
       this.loadingDone = true;
 
-      if (!snap.exists) {
+      if (!snap.exists()) {
         this.loadingDone = false;
         this.hasError = true;
       }

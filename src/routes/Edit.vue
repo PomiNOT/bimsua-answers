@@ -19,6 +19,7 @@
     @answerUpdate="updateAnswer"
     @nameUpdate="updateName"
     @deleteSheet="deleteSheet"
+    @goHome="$router.push('/')"
     v-else
   />
 </template>
@@ -28,7 +29,8 @@ import { defineComponent } from 'vue';
 import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
 import Editor from '@/components/Editor.vue';
 
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import firebaseApp from '@/firebaseApp';
+import { getAuth, setPersistence, signInAnonymously, browserLocalPersistence } from 'firebase/auth';
 import {
   getFirestore,
   doc,
@@ -42,8 +44,8 @@ import genid from 'genid';
 
 const ID_LENGTH = 20;
 
-const auth = getAuth();
-const db = getFirestore();
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
 export default defineComponent({
   name: 'Edit',
@@ -70,7 +72,7 @@ export default defineComponent({
     },
     async updateAnswer(ans: any) {
       await updateDoc(doc(db, this.getPathForSheet()), {
-        [`sheet.${ans.nQuestion}`]: ans.answer
+        [`sheet.${ans.question}`]: ans.answer
       });
     },
     async updateName(newName: string) {
@@ -86,6 +88,7 @@ export default defineComponent({
 
       await batch.commit();
 
+      await localForage.removeItem('id');
       this.$router.push('/');
     },
     getPathForSheet(): string {
@@ -96,7 +99,7 @@ export default defineComponent({
   async mounted() {
     this.name = this.$route.params.name as string;
     this.nQuestion = parseInt(this.$route.params.nQuestion as string);
-    const creating = this.$route.params.creating ? true : false;
+    const creating = !!this.$route.params.creating;
 
     if (creating) {
       this.id = genid(ID_LENGTH);
@@ -111,9 +114,16 @@ export default defineComponent({
       }
     }
 
-    if (!auth.currentUser) {
-      await signInAnonymously(auth);
-    }
+    await new Promise((resolve) => {
+      auth.onAuthStateChanged(async user => {
+        if (!user) {
+          await setPersistence(auth, browserLocalPersistence);
+          await signInAnonymously(auth);
+        }
+
+        resolve(null);
+      });
+    });
     
     this.state++;
 
@@ -135,7 +145,7 @@ export default defineComponent({
       await batch.commit();
     }
 
-    this.unsubscribe = onSnapshot(doc(db, this.getPathForSheet()), snap => {
+    this.unsubscribe = onSnapshot(doc(db, this.getPathForSheet()), (snap) => {
       const docData = snap.data();
 
       this.sheet = docData?.sheet;

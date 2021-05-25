@@ -1,9 +1,6 @@
 module.exports = {
   purge: {
-    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-    options: {
-      safelist: ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4']
-    }
+    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}']
   },
   darkMode: false,
   theme: {

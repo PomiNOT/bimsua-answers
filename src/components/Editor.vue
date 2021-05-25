@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen">
+  <div class="h-screen px-2">
     <header class="
       fixed top-0 left-0 z-10 w-full backdrop-filter backdrop-blur-md
       bg-gray-200 bg-opacity-50
@@ -26,7 +26,6 @@
       :cols-sm="2"
       :cols-md="3"
       :cols-xl="4"
-      class="px-2"
     >
       <template v-slot="{ index }">
         <edit-card
@@ -48,6 +47,7 @@
           <button type="button" @click="activePage = 'name-edit'; newName = name">Change sheet's name</button>
           <button type="button" @click="activePage = 'n-edit'; newnQuestion = nQuestion">Edit sheet length</button>
           <button type="button" @click="activePage = 'delete-confirm'">Delete this sheet</button>
+          <button type="button" @click="goHome">Go home</button>
           <button type="button" @click="menuExpanded = false">Return</button>
         </template>
       </floating-menu-page>
@@ -122,7 +122,7 @@ import copy from 'copy-to-clipboard';
 export default defineComponent({
   name: 'Editor',
   components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
-  emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet'],
+  emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet', 'goHome'],
   props: {
     sheet: {
       type: Object,
@@ -152,7 +152,7 @@ export default defineComponent({
   computed: {
     shareLink(): string {
       const loc = window.location;
-      return `${loc.protocol}//${loc.hostname}/view/${this.id}`;
+      return `${loc.protocol}//${loc.hostname}/${this.id}`;
     }
   },
   methods: {
@@ -168,6 +168,9 @@ export default defineComponent({
     deleteSheet() {
       this.$emit('deleteSheet');
       this.deleting = true;
+    },
+    goHome() {
+      this.$emit('goHome');
     },
     copyLink() {
       copy(this.shareLink);
