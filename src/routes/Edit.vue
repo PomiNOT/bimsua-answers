@@ -28,11 +28,22 @@ import { defineComponent } from 'vue';
 import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
 import Editor from '@/components/Editor.vue';
 
-import firebase from '@/firebase';
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+  updateDoc,
+  serverTimestamp,
+  writeBatch
+} from 'firebase/firestore';
 import localForage from 'localforage';
 import genid from 'genid';
 
 const ID_LENGTH = 20;
+
+const auth = getAuth();
+const db = getFirestore();
 
 export default defineComponent({
   name: 'Edit',
@@ -53,37 +64,32 @@ export default defineComponent({
   },
   methods: {
     async updateNQuestion(newnQuestion: number) {
-      await firebase
-              .firestore()
-              .doc(this.getPathForSheet())
-              .update({ nQuestion: newnQuestion });
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        nQuestion: newnQuestion
+      });
     },
     async updateAnswer(ans: any) {
-      await firebase
-              .firestore()
-              .doc(this.getPathForSheet())
-              .update({
-                [`sheet.${ans.question}`]: ans.answer
-              });
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        [`sheet.${ans.nQuestion}`]: ans.answer
+      });
     },
     async updateName(newName: string) {
-      await firebase
-              .firestore()
-              .doc(this.getPathForSheet())
-              .update({ name: newName });
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        name: newName
+      });
     },
     async deleteSheet() {
-      let batch = firebase.firestore().batch();
+      let batch = writeBatch(db);
 
-      batch.delete(firebase.firestore().doc(this.getPathForSheet()));
-      batch.delete(firebase.firestore().doc(`/sheet_refs/${this.id}`));
+      batch.delete(doc(db, this.getPathForSheet()));
+      batch.delete(doc(db, `/sheet_refs/${this.id}`));
 
       await batch.commit();
 
       this.$router.push('/');
     },
-    getPathForSheet() {
-      const userId = firebase.auth().currentUser?.uid;
+    getPathForSheet(): string {
+      const userId = auth.currentUser?.uid;
       return `/users/${userId}/sheets/${this.id}`;
     }
   },
@@ -105,43 +111,38 @@ export default defineComponent({
       }
     }
 
-    if (!firebase.auth().currentUser) {
-      await firebase.auth().signInAnonymously();
+    if (!auth.currentUser) {
+      await signInAnonymously(auth);
     }
     
     this.state++;
 
     if (creating) {
-      await firebase
-        .firestore()
-        .doc(this.getPathForSheet())
-        .set({
-          name: this.name,
-          nQuestion: this.nQuestion,
-          sheet: {}
-        });
+      let batch = writeBatch(db);
 
-      await firebase
-            .firestore()
-            .doc(`/sheet_refs/${this.id}`)
-            .set({
-              path: this.getPathForSheet(),
-              createdBy: firebase.auth().currentUser?.uid
-            });
+      batch.set(doc(db, this.getPathForSheet()), {
+        name: this.name,
+        nQuestion: this.nQuestion,
+        sheet: {}
+      });
+
+      batch.set(doc(db, `/sheet_refs/${this.id}`), {
+        path: this.getPathForSheet(),
+        createdBy: auth.currentUser?.uid,
+        createdAt: serverTimestamp()
+      });
+
+      await batch.commit();
     }
 
-    this.unsubscribe = firebase
-      .firestore()
-      .doc(this.getPathForSheet())
-      .onSnapshot(doc => {
-        const docData = doc.data();
+    this.unsubscribe = onSnapshot(doc(db, this.getPathForSheet()), snap => {
+      const docData = snap.data();
 
-        this.loadingDone = true;
-
-        this.sheet = docData?.sheet;
-        this.name = docData?.name;
-        this.nQuestion = docData?.nQuestion;
-      });
+      this.sheet = docData?.sheet;
+      this.name = docData?.name;
+      this.nQuestion = docData?.nQuestion;
+      this.loadingDone = true;
+    });
   },
   beforeUnmount() {
     this.unsubscribe?.();

@@ -38,7 +38,14 @@ import Illustration from '@/components/Illustration.vue';
 import Viewer from '@/components/Viewer.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
-import firebase from '@/firebase';
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  getFirestore
+} from 'firebase/firestore';
+
+const db = getFirestore();
 
 export default defineComponent({
   name: 'View',
@@ -53,31 +60,29 @@ export default defineComponent({
   }),
   async mounted() {
     const id = this.$route.params.id;
-    const pathRefSnapshot = await firebase.firestore().doc(`/sheet_refs/${id}`).get();
-    const pathRefData = await pathRefSnapshot.data();
+    const pathRefSnapshot = await getDoc(doc(db, `/sheet_refs/${id}`));
 
-    if (!pathRefData) {
+    if (!pathRefSnapshot.exists()) {
       this.hasError = true;
       return;
     }
 
-    this.unsubscribe = firebase
-      .firestore()
-      .doc(pathRefData.path)
-      .onSnapshot(snap => {
-        const doc = snap.data();
+    const pathRefData = pathRefSnapshot.data();
 
-        this.sheet = doc?.sheet;
-        this.name = doc?.name;
-        this.nQuestion = doc?.nQuestion;
+    this.unsubscribe = onSnapshot(doc(db, pathRefData.path), snap => {
+      const doc = snap.data();
 
-        this.loadingDone = true;
+      this.sheet = doc?.sheet;
+      this.name = doc?.name;
+      this.nQuestion = doc?.nQuestion;
 
-        if (!snap.exists) {
-          this.loadingDone = false;
-          this.hasError = true;
-        }
-      });
+      this.loadingDone = true;
+
+      if (!snap.exists) {
+        this.loadingDone = false;
+        this.hasError = true;
+      }
+    });
   },
   beforeUnmount() {
     this.unsubscribe?.();

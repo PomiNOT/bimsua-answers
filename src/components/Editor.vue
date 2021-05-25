@@ -26,6 +26,7 @@
       :cols-sm="2"
       :cols-md="3"
       :cols-xl="4"
+      class="px-2"
     >
       <template v-slot="{ index }">
         <edit-card
