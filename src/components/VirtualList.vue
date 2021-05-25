@@ -18,7 +18,7 @@ export default defineComponent({
     bufferHeight: {
       type: Number,
       required: false,
-      default: 200
+      default: 600
     },
     gap: {
       type: Number,
@@ -132,29 +132,38 @@ export default defineComponent({
   render() {
     const listHeight = this.itemHeight * this.rowCount;
 
-    return h('div', { style: `position: relative; min-height: ${listHeight}px` }, this.visibleRows.map(
-      (rowIndex) => {
-        return h(
-          'div',
-          { style: `
-            position: absolute;
-            width: 100%; 
-            transform: translateY(${rowIndex * this.itemHeight}px);
-            display: grid;
-            grid-template-columns: repeat(${this.columns}, 1fr);
-            gap: ${this.gap}px;
-            `
-          },
-          this.indices(rowIndex * this.columns, (rowIndex + 1) * this.columns).map(i => {
-            return h(
-              'div',
-              { key: i },
-              this.$slots.default?.({ index: i })
-            );
-          })
-        );
-      }
-    ));
+    console.log(this.visibleRows.length);
+
+    return h(
+      'div',
+      { style: `position: relative; min-height: ${listHeight}px` },
+      this.visibleRows.map(
+        (rowIndex, i) => {
+          console.log(i);
+
+          return h(
+            'div',
+            { 
+              style: `
+              position: absolute;
+              width: 100%; 
+              transform: translateY(${rowIndex * this.itemHeight}px);
+              display: grid;
+              grid-template-columns: repeat(${this.columns}, 1fr);
+              gap: ${this.gap}px;
+              `,
+              key: i
+            },
+            this.indices(rowIndex * this.columns, (rowIndex + 1) * this.columns).map(j => {
+              return h(
+                'div',
+                { key: 'no-rerender-key' },
+                this.$slots.default?.({ index: j })
+              );
+            })
+          );
+        })
+      );
   },
   watch: {
     length() {
