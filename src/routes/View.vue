@@ -32,7 +32,6 @@
       :nQuestion="nQuestion"
       :name="name"
       :sheet="sheet"
-      :highlightMap="hightlightMap"
       v-else
     />
   </transition>
