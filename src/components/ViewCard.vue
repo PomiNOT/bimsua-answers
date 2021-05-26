@@ -26,10 +26,11 @@ export default defineComponent({
   }),
   watch: {
     answer() {
-      if (this.timeout) return;
+      if (this.timeout) clearTimeout(this.timeout);
 
+      this.highlighted = true;
       this.timeout = setTimeout(() => {
-        this.highlighted = true;
+        this.highlighted = false;
         this.timeout = null;
       }, 2000);
     }
