@@ -1,8 +1,16 @@
 # bimsua Answers
-This is the updated version of the original bimsua Answers with a new UI.
+Simple app to share multiple choice answers, in real time\
+Powered by [Firebase](https://firebase.google.com).
 
-# Development
-You may want to populate your own Firebase configuration info
+# Configuration
+
+### Step 1
+Install the **Firebase CLI** and go through the steps, make sure to enable
+```Firestore```, ```Authentication``` and optionally ```Emulator``` for the
+emulator suite.
+
+### Step 2
+Populate your own Firebase configuration info
 in a file called .env at the root directory of the project, Vite will
 automatically insert your config into the ```src/firebase.ts``` file.
 
@@ -16,4 +24,3 @@ VITE_STORAGE_BUCKET=<your value>
 VITE_MESSAGING_SENDER_ID=<your value>
 VITE_APP_ID=<your value>
 ```
-This file is in ```.gitignore``` so it won't appear in the respository.

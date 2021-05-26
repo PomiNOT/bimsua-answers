@@ -3,6 +3,8 @@ node_modules
 dist
 dist-ssr
 *.local
+*.log
+pnpm-lock.yaml
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/tasks.json
@@ -10,3 +12,4 @@ dist-ssr
 *.code-workspace
 ### Configuration ###
 .env
+.firebaserc

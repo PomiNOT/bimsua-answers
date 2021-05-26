@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	match /users/{userId}/sheets/{sheetId} {
+    	allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    match /sheet_refs/{id} {
+    	allow create: if request.auth != null;
+      allow read: if true;
+      allow update: if false;
+      allow delete: if request.auth != null && resource.data.createdBy == request.auth.uid;
+    }
+  }
+}

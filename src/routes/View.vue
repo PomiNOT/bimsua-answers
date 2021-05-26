@@ -42,11 +42,16 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  getFirestore
+  getFirestore,
+  useFirestoreEmulator
 } from 'firebase/firestore';
 import firebaseApp from '@/firebaseApp';
 
 const db = getFirestore(firebaseApp);
+
+if (import.meta.env.DEV) {
+  useFirestoreEmulator(db, 'localhost', 8080);
+}
 
 export default defineComponent({
   name: 'View',

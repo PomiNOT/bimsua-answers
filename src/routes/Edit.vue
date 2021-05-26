@@ -30,14 +30,21 @@ import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
 import Editor from '@/components/Editor.vue';
 
 import firebaseApp from '@/firebaseApp';
-import { getAuth, setPersistence, signInAnonymously, browserLocalPersistence } from 'firebase/auth';
+import { 
+  getAuth,
+  setPersistence,
+  signInAnonymously,
+  browserLocalPersistence,
+  useAuthEmulator
+} from 'firebase/auth';
 import {
   getFirestore,
   doc,
   onSnapshot,
   updateDoc,
   serverTimestamp,
-  writeBatch
+  writeBatch,
+  useFirestoreEmulator
 } from 'firebase/firestore';
 import localForage from 'localforage';
 import genid from 'genid';
@@ -46,6 +53,11 @@ const ID_LENGTH = 20;
 
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
+
+if (import.meta.env.DEV) {
+  useFirestoreEmulator(db, 'localhost', 8080);
+  useAuthEmulator(auth, 'http://localhost:9099');
+}
 
 export default defineComponent({
   name: 'Edit',
