@@ -24,7 +24,7 @@
       :gap="5"
       :cols="1"
       :cols-sm="2"
-      :cols-md="3"
+      :cols-lg="3"
       :cols-xl="4"
     >
       <template v-slot="{ index }">

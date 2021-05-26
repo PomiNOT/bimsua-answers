@@ -17,9 +17,13 @@
         :colsSm="4"
         :colsLg="5"
         :gap="6"
+        useDifferentKeyForChild
       >
         <template v-slot="{ index }">
-          <view-card :question="index + 1" :answer="sheet[index + 1] ?? '...'" />
+          <view-card
+            :question="index + 1"
+            :answer="sheet[index + 1] ?? '...'"
+          />
         </template>
       </virtual-list>
     </div>

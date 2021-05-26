@@ -1,8 +1,9 @@
 <script lang="ts">
-//Virtual List that listens on the page for scroll events.
+//This virtual list works on whole page only.
 
 import { defineComponent, h } from 'vue';
 import ScrollParent from 'scrollparent';
+import throttle from 'lodash.throttle';
 
 export default defineComponent({
   name: 'VirtualList',
@@ -15,10 +16,15 @@ export default defineComponent({
       type: Number,
       required: true
     },
+    useDifferentKeyForChild: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     bufferHeight: {
       type: Number,
       required: false,
-      default: 600
+      default: 400
     },
     gap: {
       type: Number,
@@ -54,7 +60,9 @@ export default defineComponent({
   data: () => ({
     visibleRows: [] as number[],
     scrollTarget: null as null | any,
-    columns: 2
+    columns: 2,
+    called: 0,
+    updateVisibleRowsThrottled: null as null | Function
   }),
   computed: {
     rowCount(): number {
@@ -134,11 +142,9 @@ export default defineComponent({
 
     return h(
       'div',
-      { style: `position: relative; min-height: ${listHeight}px` },
+      { style: `position: relative; min-height: ${listHeight}px;` },
       this.visibleRows.map(
         (rowIndex, i) => {
-          console.log(i);
-
           return h(
             'div',
             { 
@@ -155,7 +161,7 @@ export default defineComponent({
             this.indices(rowIndex * this.columns, (rowIndex + 1) * this.columns).map(j => {
               return h(
                 'div',
-                { key: 'no-rerender-key' },
+                { key: this.useDifferentKeyForChild ? j : 'no-rerender-key' },
                 this.$slots.default?.({ index: j })
               );
             })
@@ -175,18 +181,24 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.updateVisibleRows();
     this.getListenerTarget();
-    this.resizeGrid();
+    this.updateVisibleRowsThrottled = throttle(this.updateVisibleRows.bind(this), 100);
 
-    window.addEventListener('resize', this.updateVisibleRows);
+    window.addEventListener('resize', this.updateVisibleRowsThrottled as any);
     window.addEventListener('resize', this.resizeGrid);
-    this.scrollTarget.addEventListener('scroll', this.updateVisibleRows, { passive: true });
+    this.scrollTarget.addEventListener(
+      'scroll',
+      this.updateVisibleRowsThrottled as any, 
+      { passive: true }
+    );
+
+    this.resizeGrid();
+    this.updateVisibleRows();
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.resizeGrid);
-    window.removeEventListener('resize', this.updateVisibleRows);
-    this.scrollTarget.removeEventListener('scroll', this.updateVisibleRows);
+    window.removeEventListener('resize', this.updateVisibleRowsThrottled as any);
+    this.scrollTarget.removeEventListener('scroll', this.updateVisibleRowsThrottled as any);
   }
 });
 </script>

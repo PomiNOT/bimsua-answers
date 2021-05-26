@@ -16,7 +16,7 @@
     :name="name"
     :id="id"
     @nQuestionUpdate="updateNQuestion"
-    @answerUpdate="updateAnswer"
+    @answerUpdate="addToUpdateQueueAndSubmit"
     @nameUpdate="updateName"
     @deleteSheet="deleteSheet"
     @goHome="$router.push('/')"
@@ -45,6 +45,7 @@ import {
 
 import localForage from 'localforage';
 import genid from 'genid';
+import debounce from 'lodash.debounce';
 
 const ID_LENGTH = 20;
 
@@ -58,7 +59,9 @@ export default defineComponent({
     id: '',
     name: '',
     sheet: {} as any,
-    unsubscribe: null as Function | null
+    changes: {} as any,
+    unsubscribe: null as Function | null,
+    submitAnswersDebounced: null as Function | null
   }),
   computed: {
     stateToText(): string {
@@ -71,10 +74,14 @@ export default defineComponent({
         nQuestion: newnQuestion
       });
     },
-    async updateAnswer(ans: any) {
-      await updateDoc(doc(db, this.getPathForSheet()), {
-        [`sheet.${ans.question}`]: ans.answer
-      });
+    addToUpdateQueueAndSubmit(ans: any) {
+      this.changes[`sheet.${ans.question}`] = ans.answer;
+      this.sheet[ans.question] = ans.answer;
+      this.submitAnswersDebounced?.();
+    },
+    async submitAnswers() {
+      await updateDoc(doc(db, this.getPathForSheet()), this.changes);
+      this.changes = {};
     },
     async updateName(newName: string) {
       await updateDoc(doc(db, this.getPathForSheet()), {
@@ -154,6 +161,12 @@ export default defineComponent({
       this.nQuestion = docData?.nQuestion;
       this.loadingDone = true;
     });
+
+    this.submitAnswersDebounced = debounce(
+      this.submitAnswers.bind(this),
+      2000,
+      { leading: true }
+    );
   },
   beforeUnmount() {
     this.unsubscribe?.();

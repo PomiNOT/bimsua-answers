@@ -2,7 +2,9 @@ lockfileVersion: 5.3
 
 specifiers:
   '@tailwindcss/aspect-ratio': ^0.2.0
+  '@types/lodash.debounce': ^4.0.6
   '@types/lodash.isequal': ^4.5.5
+  '@types/lodash.throttle': ^4.1.6
   '@types/scrollparent': ^2.0.0
   '@vitejs/plugin-vue': ^1.2.1
   '@vue/compiler-sfc': ^3.0.5
@@ -13,7 +15,9 @@ specifiers:
   flip-toolkit: ^7.0.13
   genid: ^0.1.0
   localforage: ^1.9.0
+  lodash.debounce: ^4.0.8
   lodash.isequal: ^4.5.0
+  lodash.throttle: ^4.1.1
   postcss: ^8.2.10
   postcss-viewport-height-correction: ^1.1.1
   scrollparent: ^2.0.1
@@ -32,14 +36,18 @@ dependencies:
   flip-toolkit: 7.0.13
   genid: 0.1.0
   localforage: 1.9.0
+  lodash.debounce: 4.0.8
   lodash.isequal: 4.5.0
+  lodash.throttle: 4.1.1
   scrollparent: 2.0.1
   tsparticles: 1.27.0
   vue: 3.0.11
   vue-router: 4.0.6_vue@3.0.11
 
 devDependencies:
+  '@types/lodash.debounce': 4.0.6
   '@types/lodash.isequal': 4.5.5
+  '@types/lodash.throttle': 4.1.6
   '@types/scrollparent': 2.0.0
   '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
   '@vue/compiler-sfc': 3.0.11_vue@3.0.11
@@ -564,14 +572,30 @@ packages:
     resolution: {integrity: sha512-v5LyHkwXj/4lI74B06zUrmWEdmSqS43+jw717pkt3fAXqb7ALwu77A8t7j+Bej+ZbdlIIqNMYheGN7wSGV1A6w==}
     dev: false
 
+  /@types/lodash.debounce/4.0.6:
+    resolution: {integrity: sha512-4WTmnnhCfDvvuLMaF3KV4Qfki93KebocUF45msxhYyjMttZDQYzHkO639ohhk8+oco2cluAFL3t5+Jn4mleylQ==}
+    dependencies:
+      '@types/lodash': 4.14.170
+    dev: true
+
   /@types/lodash.isequal/4.5.5:
     resolution: {integrity: sha512-4IKbinG7MGP131wRfceK6W4E/Qt3qssEFLF30LnJbjYiSfHGGRU/Io8YxXrZX109ir+iDETC8hw8QsDijukUVg==}
     dependencies:
       '@types/lodash': 4.14.168
     dev: true
 
+  /@types/lodash.throttle/4.1.6:
+    resolution: {integrity: sha512-/UIH96i/sIRYGC60NoY72jGkCJtFN5KVPhEMMMTjol65effe1gPn0tycJqV5tlSwMTzX8FqzB5yAj0rfGHTPNg==}
+    dependencies:
+      '@types/lodash': 4.14.170
+    dev: true
+
   /@types/lodash/4.14.168:
     resolution: {integrity: sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==}
+    dev: true
+
+  /@types/lodash/4.14.170:
+    resolution: {integrity: sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==}
     dev: true
 
   /@types/long/4.0.1:
@@ -1330,8 +1354,16 @@ packages:
   /lodash.camelcase/4.3.0:
     resolution: {integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=}
 
+  /lodash.debounce/4.0.8:
+    resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
+    dev: false
+
   /lodash.isequal/4.5.0:
     resolution: {integrity: sha1-QVxEePK8wwEgwizhDtMib30+GOA=}
+    dev: false
+
+  /lodash.throttle/4.1.1:
+    resolution: {integrity: sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=}
     dev: false
 
   /lodash.toarray/4.4.0:

@@ -13,14 +13,18 @@
     "flip-toolkit": "^7.0.13",
     "genid": "^0.1.0",
     "localforage": "^1.9.0",
+    "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
+    "lodash.throttle": "^4.1.1",
     "scrollparent": "^2.0.1",
     "tsparticles": "^1.27.0",
     "vue": "^3.0.5",
     "vue-router": "^4.0.6"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.isequal": "^4.5.5",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/scrollparent": "^2.0.0",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.5",

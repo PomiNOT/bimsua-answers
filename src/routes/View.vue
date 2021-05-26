@@ -28,7 +28,13 @@
       </div>
     </div>
 
-    <viewer :nQuestion="nQuestion" :name="name" :sheet="sheet" v-else />
+    <viewer
+      :nQuestion="nQuestion"
+      :name="name"
+      :sheet="sheet"
+      :highlightMap="hightlightMap"
+      v-else
+    />
   </transition>
 </template>
 
@@ -55,7 +61,7 @@ export default defineComponent({
     sheet: {} as any,
     nQuestion: 0,
     name: 'My Amazing Answers',
-    unsubscribe: null as Function | null
+    unsubscribe: null as Function | null,
   }),
   async mounted() {
     const id = this.$route.params.id;
