@@ -6,4 +6,6 @@ interface ImportMetaEnv {
   VITE_STORAGE_BUCKET: string
   VITE_MESSAGING_SENDER_ID: string
   VITE_APP_ID: string
+  VITE_ENABLE_GOOGLE_ANALYTICS: boolean
+  VITE_ENABLE_PERF_MONITORING: boolean
 }

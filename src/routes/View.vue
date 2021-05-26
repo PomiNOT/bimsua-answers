@@ -38,20 +38,13 @@ import Illustration from '@/components/Illustration.vue';
 import Viewer from '@/components/Viewer.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
+
 import {
   doc,
   getDoc,
   onSnapshot,
-  getFirestore,
-  useFirestoreEmulator
 } from 'firebase/firestore';
-import firebaseApp from '@/firebaseApp';
-
-const db = getFirestore(firebaseApp);
-
-if (import.meta.env.DEV) {
-  useFirestoreEmulator(db, 'localhost', 8080);
-}
+import { db } from '@/firebaseApp';
 
 export default defineComponent({
   name: 'View',

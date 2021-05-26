@@ -132,8 +132,6 @@ export default defineComponent({
   render() {
     const listHeight = this.itemHeight * this.rowCount;
 
-    console.log(this.visibleRows.length);
-
     return h(
       'div',
       { style: `position: relative; min-height: ${listHeight}px` },

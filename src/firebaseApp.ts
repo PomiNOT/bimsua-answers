@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getPerformance } from 'firebase/performance';
+import { getAuth, useAuthEmulator } from 'firebase/auth';
+import { getFirestore, useFirestoreEmulator } from 'firebase/firestore';
 
 let config: any = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -11,7 +12,22 @@ let config: any = {
   appId: import.meta.env.VITE_APP_ID
 };
 
-const firebaseApp = initializeApp(config);
-getPerformance(firebaseApp);
+export const firebaseApp = initializeApp(config);
+export let analytics: any = undefined;
+export let perf: any = undefined;
 
-export default firebaseApp;
+if (import.meta.env.VITE_ENABLE_GOOGLE_ANALYTICS) {
+  import('firebase/analytics').then(({ getAnalytics }) => analytics = getAnalytics(firebaseApp));
+}
+
+if (import.meta.env.VITE_ENABLE_PERF_MONITORING) {
+  import('firebase/performance').then(({ getPerformance }) => perf = getPerformance(firebaseApp));
+}
+
+export const db = getFirestore(firebaseApp);
+export const auth = getAuth(firebaseApp);
+
+if (import.meta.env.DEV) {
+  useFirestoreEmulator(db, 'localhost', 8080);
+  useAuthEmulator(auth, 'http://localhost:9099');
+}

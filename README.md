@@ -12,7 +12,7 @@ emulator suite.
 ### Step 2
 Populate your own Firebase configuration info
 in a file called .env at the root directory of the project, Vite will
-automatically insert your config into the ```src/firebase.ts``` file.
+automatically insert your config into the ```src/firebaseApp.ts``` file.
 
 The contents of the .env file is:
 ```
@@ -23,4 +23,6 @@ VITE_PROJECT_ID=<your value>
 VITE_STORAGE_BUCKET=<your value>
 VITE_MESSAGING_SENDER_ID=<your value>
 VITE_APP_ID=<your value>
+VITE_ENABLE_GOOGLE_ANALYTICS=<1 or 0>
+VITE_ENABLE_PERF_MONITORING=<1 or 0>
 ```
