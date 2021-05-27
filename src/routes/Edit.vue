@@ -154,10 +154,14 @@ export default defineComponent({
       await batch.commit();
 
       if (import.meta.env.VITE_ENABLE_GOOGLE_ANALYTICS) {
-        analytics.logEvent('create_sheet', {
-          numberOfQuestions: this.nQuestion,
-          isDefaultName: this.name == DEFAULT_NAME
-        });
+        analytics.logEvent(
+          analytics.analyticsInstance,
+          'create_sheet',
+          {
+            numberOfQuestions: this.nQuestion,
+            isDefaultName: this.name == DEFAULT_NAME
+          }
+        );
       }
     }
 
