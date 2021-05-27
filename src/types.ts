@@ -10,3 +10,5 @@ export enum AnswerOption {
   D = 'D',
   NONE = ''
 }
+
+export const DEFAULT_NAME: string = 'My Amazing Answers';

@@ -17,11 +17,21 @@ export let analytics: any = undefined;
 export let perf: any = undefined;
 
 if (import.meta.env.VITE_ENABLE_GOOGLE_ANALYTICS) {
-  import('firebase/analytics').then(({ getAnalytics }) => analytics = getAnalytics(firebaseApp));
+  import('firebase/analytics').then(({ getAnalytics, logEvent }) => {
+    analytics = {
+      analyticsInstance: getAnalytics(firebaseApp),
+      logEvent
+    };
+  });
 }
 
 if (import.meta.env.VITE_ENABLE_PERF_MONITORING) {
-  import('firebase/performance').then(({ getPerformance }) => perf = getPerformance(firebaseApp));
+  import('firebase/performance').then(({ getPerformance, trace }) => {
+    perf = {
+      perfInstance: getPerformance(firebaseApp),
+      trace
+    };
+  });
 }
 
 export const db = getFirestore(firebaseApp);

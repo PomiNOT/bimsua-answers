@@ -61,13 +61,14 @@ import { defineComponent } from 'vue';
 import Illustration from '@/components/Illustration.vue';
 import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
 import localForage from 'localforage';
+import { DEFAULT_NAME } from '@/types';
 
 export default defineComponent({
   name: 'HomeScreen',
   components: { Illustration, BounceTransition },
   data: () => ({
     showForm: false,
-    sheetName: 'My Amazing Answers',
+    sheetName: DEFAULT_NAME,
     nQuestion: 5,
     hasRecent: false
   }),

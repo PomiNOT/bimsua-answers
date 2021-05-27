@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
 import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
 import Editor from '@/components/Editor.vue';
 
-import { auth, db } from '@/firebaseApp';
+import { auth, db, analytics } from '@/firebaseApp';
 import { 
   setPersistence,
   signInAnonymously,
@@ -42,6 +42,7 @@ import {
   serverTimestamp,
   writeBatch,
 } from 'firebase/firestore';
+import { DEFAULT_NAME } from '@/types';
 
 import localForage from 'localforage';
 import genid from 'genid';
@@ -151,6 +152,13 @@ export default defineComponent({
       });
 
       await batch.commit();
+
+      if (import.meta.env.VITE_ENABLE_GOOGLE_ANALYTICS) {
+        analytics.logEvent('create_sheet', {
+          numberOfQuestions: this.nQuestion,
+          isDefaultName: this.name == DEFAULT_NAME
+        });
+      }
     }
 
     this.unsubscribe = onSnapshot(doc(db, this.getPathForSheet()), (snap) => {
@@ -164,7 +172,7 @@ export default defineComponent({
 
     this.submitAnswersDebounced = debounce(
       this.submitAnswers.bind(this),
-      2000,
+      1000,
       { leading: true }
     );
   },

@@ -51,6 +51,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebaseApp';
 
+import { DEFAULT_NAME } from '@/types';
+
 export default defineComponent({
   name: 'View',
   components: { Illustration, Viewer, Flipper, FadeTransition },
@@ -59,7 +61,7 @@ export default defineComponent({
     hasError: false,
     sheet: {} as any,
     nQuestion: 0,
-    name: 'My Amazing Answers',
+    name: DEFAULT_NAME,
     unsubscribe: null as Function | null,
   }),
   async mounted() {
