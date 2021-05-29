@@ -123,11 +123,15 @@ export default defineComponent({
         }
       });
     },
-    resume(id: string?) {
+    resume(id: string | undefined) {
+      if (!id) {
+        alert('Error: No id was supplied (undefined)');
+      }
+
       this.$router.push({
         name: 'Edit',
         params: {
-          continueId: id ?? ""
+          continueId: id!
         }
       });
     }
