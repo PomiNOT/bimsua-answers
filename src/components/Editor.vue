@@ -36,7 +36,24 @@
 
     <div class="h-24">&nbsp;</div>
 
-    <floating-menu buttonName="Menu" :page="activePage" v-model:expanded="menuExpanded">
+    <floating-menu :page="activePage" v-model:expanded="menuExpanded">
+      <template #small>
+        <div class="fixed w-full flex justify-center z-50 bottom-7 left-0">
+          <button
+            data-flip-key="dialog"
+            type="button"
+            @click="menuExpanded = true"
+            class="
+              px-5 py-2 rounded-full
+              bg-gray-600 font-bold text-white
+              bg-opacity-50 focus:outline-none focus:bg-opacity-90 backdrop-filter backdrop-blur-lg
+            "
+          >
+            Menu
+          </button>
+        </div>
+      </template>
+
       <floating-menu-page
         title="Action Menu"
         subtitle="What do you want to do?"
@@ -57,8 +74,8 @@
         subtitle="Click Save when you're done"
         name="name-edit"
       >
+        <input type="text" v-model="newName" class="input w-full" placeholder="New name">
         <template #actions>
-          <input type="text" v-model="newName" class="input" placeholder="New name">
           <button type="button" @click="updateName(); activePage = 'main'">Save</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>
@@ -69,16 +86,11 @@
         subtitle="Need more or less?"
         name="n-edit"
       >
+        <input
+          type="number"
+          v-model.number="newnQuestion" min="1" class="input w-full" placeholder="New sheet length"
+        >
         <template #actions>
-          <input
-            type="number"
-            v-model.number="newnQuestion" min="1" class="input" placeholder="New sheet length"
-          >
-          <fade-transition>
-            <p class="text-white text-opacity-70" v-if="nQuestion > 500">
-              It's already too much dude!
-            </p>
-          </fade-transition>
           <button type="button" @click="updateNQuestion(); menuExpanded = false">Resize</button>
           <button type="button" @click="activePage = 'main'">Return</button>
         </template>

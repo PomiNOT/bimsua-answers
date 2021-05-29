@@ -9,10 +9,46 @@
             <p class="px-10 text-gray-500">Create and share your multiple choice answers <span class="underline font-bold">free</span>, no login required.</p>
           </div>
           <div class="mt-6 space-x-2">
-            <button type="button" v-if="hasRecent" @click="$router.push('/edit')" class="btn btn-white">
-              Load recent
-            </button>
-            <button type="button" @click="showForm = true" class="btn">Create new!</button>
+            <flipper :flip-key="menuExpanded">
+              <floating-menu v-model:expanded="menuExpanded">
+                <template #small>
+                  <button 
+                    data-flip-key="dialog"
+                    type="button" 
+                    v-show="recents.length > 0"
+                    @click="menuExpanded = true"
+                    class="btn btn-white"
+                  >
+                    Load recent
+                  </button>
+                </template>
+
+                <floating-menu-page
+                  name="main"
+                  title="Load recent"
+                  subtitle="Continue editing one of your recent sheets."
+                >
+                  <div class="space-y-2 max-h-36 overflow-y-auto">
+                    <button 
+                      class="w-full flex bg-white bg-opacity-30"
+                      v-for="{ id, name, nQuestion } in recents"
+                      @click="resume(id)" 
+                      :key="id"
+                    >
+                      <p class="flex-1">{{ name }}</p>
+                      <p class="bg-white bg-opacity-20 rounded px-2">{{ nQuestion }}</p>
+                    </button>
+                  </div>
+                  <template #actions>
+                    <button type="button" @click="menuExpanded = false">Close</button>
+                  </template>
+                </floating-menu-page>
+              </floating-menu>
+            
+              <button data-flip-key="create" type="button" @click="showForm = true" class="btn">
+                Create new!
+              </button>
+            </flipper>
           </div>
           <div class="mt-6 text-xs text-center">
             <p class="text-gray-300">{{ new Date().getFullYear() }}, bimsua Studios</p>
@@ -22,7 +58,6 @@
           </div>
         </div>
       </div>
-
       
       <form class="px-4 flex flex-col w-full sm:w-3/4 md:w-1/2 max-w-lg" v-else>
         <div class="text-center flex flex-col items-center">
@@ -60,17 +95,22 @@
 import { defineComponent } from 'vue';
 import Illustration from '@/components/Illustration.vue';
 import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
-import localForage from 'localforage';
-import { DEFAULT_NAME } from '@/types';
+import FloatingMenu from '@/components/FloatingMenu.vue';
+import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
+import Flipper from '@/components/flip/Flipper.vue';
+import RecentsDatabase from '@/recentsdb';
+
+import { DEFAULT_NAME, Sheet } from '@/types';
 
 export default defineComponent({
   name: 'HomeScreen',
-  components: { Illustration, BounceTransition },
+  components: { Illustration, Flipper, BounceTransition, FloatingMenu, FloatingMenuPage },
   data: () => ({
     showForm: false,
     sheetName: DEFAULT_NAME,
     nQuestion: 5,
-    hasRecent: false
+    recents: [] as Sheet[],
+    menuExpanded: false
   }),
   methods: {
     createNew() {
@@ -82,12 +122,19 @@ export default defineComponent({
           creating: 'true'
         }
       });
+    },
+    resume(id: string) {
+      this.$router.push({
+        name: 'Edit',
+        params: {
+          continueId: id
+        }
+      });
     }
   },
   async mounted() {
-    const retrievedId = await localForage.getItem('id');
-
-    this.hasRecent = !!retrievedId;
+    const recentsdb = new RecentsDatabase();
+    this.recents = await recentsdb.recents.toArray();
   }
 });
 </script>

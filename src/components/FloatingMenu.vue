@@ -1,19 +1,7 @@
 <template>
   <flipper :flip-key="{ expanded, page }">
-    <div class="fixed w-full flex justify-center z-50 bottom-7 left-0" v-if="!expanded">
-      <button
-        data-flip-key="dialog"
-        type="button"
-        @click="$emit('update:expanded', true)"
-        class="
-          px-5 py-2 rounded-full
-          bg-gray-600 font-bold text-white
-          bg-opacity-50 focus:outline-none focus:bg-opacity-90 backdrop-filter backdrop-blur-lg
-        "
-      >
-        {{ buttonName }}
-      </button>
-    </div>
+    <slot name="small" v-if="!expanded">
+    </slot>
 
     <div v-else data-flip-key="dialog" class="
       fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform z-50
@@ -49,10 +37,6 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
-    },
-    buttonName: {
-      type: String,
-      required: true
     },
     page: {
       type: String,

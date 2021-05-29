@@ -11,4 +11,10 @@ export enum AnswerOption {
   NONE = ''
 }
 
+export interface Sheet {
+  id?: string,
+  name?: string,
+  nQuestion?: number
+}
+
 export const DEFAULT_NAME: string = 'My Amazing Answers';

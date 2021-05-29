@@ -42,13 +42,16 @@ import {
   serverTimestamp,
   writeBatch,
 } from 'firebase/firestore';
-import { DEFAULT_NAME } from '@/types';
 
+import { DEFAULT_NAME } from '@/types';
+import RecentsDatabase from '@/recentsdb';
 import localForage from 'localforage';
 import genid from 'genid';
 import debounce from 'lodash.debounce';
 
 const ID_LENGTH = 20;
+
+const recentsdb = new RecentsDatabase();
 
 export default defineComponent({
   name: 'Edit',
@@ -71,35 +74,53 @@ export default defineComponent({
   },
   methods: {
     async updateNQuestion(newnQuestion: number) {
-      await updateDoc(doc(db, this.getPathForSheet()), {
-        nQuestion: newnQuestion
-      });
+      await Promise.all([
+        updateDoc(doc(db, this.getPathForSheet()), {
+          nQuestion: newnQuestion
+        }),
+        recentsdb.recents.update(this.id, {
+          nQuestion: newnQuestion
+        })
+      ])
     },
+    
     addToUpdateQueueAndSubmit(ans: any) {
       this.changes[`sheet.${ans.question}`] = ans.answer;
       this.sheet[ans.question] = ans.answer;
       this.submitAnswersDebounced?.();
     },
+
     async submitAnswers() {
       await updateDoc(doc(db, this.getPathForSheet()), this.changes);
       this.changes = {};
     },
+
     async updateName(newName: string) {
-      await updateDoc(doc(db, this.getPathForSheet()), {
-        name: newName
-      });
+      await Promise.all([
+        updateDoc(doc(db, this.getPathForSheet()), {
+          name: newName
+        }),
+        recentsdb.recents.update(this.id, {
+          name: newName
+        })
+      ]);
     },
+
     async deleteSheet() {
       let batch = writeBatch(db);
 
       batch.delete(doc(db, this.getPathForSheet()));
       batch.delete(doc(db, `/sheet_refs/${this.id}`));
 
-      await batch.commit();
+      await Promise.all([
+        batch.commit(),
+        localForage.removeItem('lastID'),
+        recentsdb.recents.delete(this.id)
+      ]);
 
-      await localForage.removeItem('id');
       this.$router.push('/');
     },
+
     getPathForSheet(): string {
       const userId = auth.currentUser?.uid;
       return `/users/${userId}/sheets/${this.id}`;
@@ -108,16 +129,28 @@ export default defineComponent({
   async mounted() {
     this.name = this.$route.params.name as string;
     this.nQuestion = parseInt(this.$route.params.nQuestion as string);
+    let continueId = this.$route.params.continueId as string;
     const creating = !!this.$route.params.creating;
 
     if (creating) {
       this.id = genid(ID_LENGTH);
-      await localForage.setItem('id', this.id);
-    } else {
-      const retrievedId = await localForage.getItem('id');
+      await Promise.all([
+        localForage.setItem('lastID', this.id),
+        recentsdb.recents.put({
+          id: this.id,
+          name: this.name,
+          nQuestion: this.nQuestion
+        })
+      ]);
+    } else if (continueId) {
+      this.id = continueId;
+    }
+    else {
+      const retrievedId = await localForage.getItem('lastID');
 
       if (!retrievedId) {
-        throw new Error('Not creating but also no ID found');
+        alert('No recent session found.');
+        this.$router.push('/');
       } else {
         this.id = retrievedId as string;
       }
@@ -176,8 +209,7 @@ export default defineComponent({
 
     this.submitAnswersDebounced = debounce(
       this.submitAnswers.bind(this),
-      1000,
-      { leading: true }
+      1000
     );
   },
   beforeUnmount() {
