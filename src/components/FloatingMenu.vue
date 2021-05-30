@@ -12,15 +12,17 @@
       </div>
     </div>
 
-    <fade-transition>
-      <div
-        v-if="expanded" 
-        @click="$emit('update:expanded', false)"
-        class="fixed top-0 left-0 z-40 w-full h-full bg-black
-              bg-opacity-10 backdrop-filter backdrop-blur-lg"
-      >
-      </div>
-    </fade-transition>
+    <teleport to="body">
+      <fade-transition>
+        <div
+          v-if="expanded" 
+          @click="$emit('update:expanded', false)"
+          class="fixed top-0 left-0 z-40 w-full h-full bg-black
+                bg-opacity-10 backdrop-filter backdrop-blur-lg"
+        >
+        </div>
+      </fade-transition>
+    </teleport>
   </flipper>
 </template>
 

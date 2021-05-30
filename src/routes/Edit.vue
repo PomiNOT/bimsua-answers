@@ -144,6 +144,7 @@ export default defineComponent({
       ]);
     } else if (continueId) {
       this.id = continueId;
+      await localForage.setItem('lastID', this.id);
     }
     else {
       const retrievedId = await localForage.getItem('lastID');
