@@ -178,6 +178,12 @@ export default defineComponent({
     },
     bufferHeight() {
       this.updateVisibleRows();
+    },
+    columns(newCols, oldCols) {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const previouslyLookedAt = Math.floor((scrollTop / this.itemHeight) * oldCols);
+      const thatElementRowNow = Math.floor(previouslyLookedAt / newCols);
+      this.scrollTarget.scrollTo(0, thatElementRowNow * this.itemHeight);
     }
   },
   mounted() {
