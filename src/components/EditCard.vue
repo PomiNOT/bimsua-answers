@@ -66,7 +66,7 @@ export default defineComponent({
 }
 
 .choice-button:focus {
-    @apply bg-green-400 text-white transform animate-pulse;
+    @apply bg-gray-300 animate-pulse;
 }
 
 .selected {

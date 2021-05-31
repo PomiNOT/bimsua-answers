@@ -64,6 +64,7 @@ export default defineComponent({
     name: '',
     sheet: {} as any,
     changes: {} as any,
+    batch: 0,
     unsubscribe: null as Function | null,
     submitAnswersDebounced: null as Function | null
   }),
@@ -85,14 +86,31 @@ export default defineComponent({
     },
     
     addToUpdateQueueAndSubmit(ans: any) {
-      this.changes[`sheet.${ans.question}`] = ans.answer;
+      this.changes[`sheet.${ans.question}.${this.batch}`] = ans.answer;
       this.sheet[ans.question] = ans.answer;
       this.submitAnswersDebounced?.();
     },
 
     async submitAnswers() {
-      await updateDoc(doc(db, this.getPathForSheet()), this.changes);
-      this.changes = {};
+      let batchChanges: any = {};
+
+      Object
+        .keys(this.changes)
+        .filter(key => {
+          const batchNOfKey = key.split('.')[2];
+          return parseInt(batchNOfKey) == this.batch;
+        })
+        .forEach(key => {
+          let keyNameWithNumberRemoved = key.split('.').slice(0, 2).join('.');
+          batchChanges[keyNameWithNumberRemoved] = this.changes[key];
+          delete this.changes[key];
+        });
+
+      console.log(batchChanges);
+
+      this.batch++;
+
+      await updateDoc(doc(db, this.getPathForSheet()), batchChanges);
     },
 
     async updateName(newName: string) {
