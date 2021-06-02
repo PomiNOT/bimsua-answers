@@ -5,10 +5,10 @@ export default class RecentsDatabase extends Dexie {
     public recents: Dexie.Table<Sheet, string>;
  
     public constructor() {
-        super("RecentsDatabase");
+        super('RecentsDatabase');
         this.version(1).stores({
-          recents: "id,name"
+          recents: 'id,name,nQuestion'
         });
-        this.recents = this.table("recents");
+        this.recents = this.table('recents');
     }
 }
