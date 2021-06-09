@@ -6,7 +6,7 @@ export default class RecentsDatabase extends Dexie {
  
     public constructor() {
         super('RecentsDatabase');
-        this.version(1).stores({
+        this.version(2).stores({
           recents: 'id,name,nQuestion'
         });
         this.recents = this.table('recents');

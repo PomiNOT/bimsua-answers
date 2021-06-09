@@ -35,8 +35,8 @@
           :question="index + 1"
           :answer="sheet[index + 1] ?? ''"
           :rightAnswer="rightSheet[index + 1] ?? ''"
-          @updateAnswer="updateAnswer"
-          @updateRightAnswer="updateRightAnswer"
+          @update:answer="updateAnswer"
+          @update:rightAnswer="updateRightAnswer"
         />
       </template>
     </virtual-list>
