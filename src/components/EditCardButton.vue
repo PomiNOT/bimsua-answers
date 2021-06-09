@@ -4,7 +4,7 @@
     class="
       font-bold focus:outline-none focus:bg-gray-300
       rounded-full w-9 h-9 border-2 border-gray-400
-      transition-colors duration-100
+      select-none
     "
     :class="determineColor"
   >
@@ -49,7 +49,8 @@ export default defineComponent({
       } else {
         return {
           'border-green-400 focus:bg-green-500 text-white bg-green-400': isRightChoice,
-          'border-gray-300 text-white erased focus:bg-gray-300 bg-gray-400': selected && !isRightChoice
+          'erased': isRightChoice && !this.currentChoice,
+          'border-gray-300 text-white erased opacity-20 focus:bg-gray-300 bg-gray-400': selected && !isRightChoice
         };
       }
     }
@@ -95,16 +96,17 @@ export default defineComponent({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-45deg);
-  animation: scaleUp 300ms;
-  @apply rounded-md bg-black bg-opacity-70;
+  @apply rounded-md bg-black;
 }
 
-@keyframes scaleUp {
-  0% {
-    width: 0px;
-  }
-  100% {
-    width: 140%;
-  }
+.erased::after {
+  content: '';
+  position: absolute;
+  width: 140%;
+  height: 3px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  @apply rounded-md bg-black;
 }
 </style>

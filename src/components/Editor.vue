@@ -1,25 +1,39 @@
 <template>
   <div class="h-screen px-2">
-    <header class="
-      fixed top-0 left-0 z-10 w-full backdrop-filter backdrop-blur-md
-      bg-gray-200 bg-opacity-50
-      h-18 p-2 flex items-center"
-    >
+    <header
+      class="
+        fixed top-0 left-0 z-10 w-full backdrop-filter backdrop-blur-md
+        bg-gray-200 bg-opacity-50 transition-all duration-300
+        h-18 p-2 flex items-center
+      "
+      :class="score > 0 ? 'py-4' : 'py-2'" 
+    > 
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">{{ name }}</h1>
         <p class="text-gray-500">
           <span>{{ nQuestion }} questions</span>
-          <span v-if="score > 0"> / {{ ((score / nQuestion) * 100).toFixed(1) }}% correct</span>
         </p>
       </div>
       <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
         <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
         <span class="ml-2">LIVE</span>
       </div>
+      <fade-transition>
+        <div v-if="score > 0" class="
+          w-full absolute h-1 flex justify-center items-center bg-green-500 bottom-0 left-0
+        ">
+          <div class="
+            leading-tight px-2 absolute bg-green-500
+            text-white rounded-md font-bold
+          ">
+            {{ score }} <span class="text-gray-300">/ 10</span>
+          </div>
+        </div>
+      </fade-transition>
     </header>
 
-    <div class="h-10">&nbsp;</div>
     <div class="h-18">&nbsp;</div>
+    <div class="transition-all duration-300" :class="score > 0 ? 'h-16' : 'h-10'">&nbsp;</div>
 
     <virtual-list
       :length="nQuestion"
@@ -187,7 +201,9 @@ export default defineComponent({
         return 0;
       }
 
-      return rights.reduce((count, isRight) => count + (isRight ? 1 : 0), 0);
+      const rightCount = rights.reduce((count, isRight) => count + (isRight ? 1 : 0), 0);
+      const perTen = (rightCount / this.nQuestion) * 10;
+      return perTen % 1 == 0 ? perTen : parseFloat(perTen.toFixed(2));
     }
   },
   methods: {
