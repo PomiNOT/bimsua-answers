@@ -201,7 +201,8 @@ export default defineComponent({
       batch.set(doc(db, this.getPathForSheet()), {
         name: this.name,
         nQuestion: this.nQuestion,
-        sheet: {}
+        sheet: {},
+        rightSheet: {}
       });
 
       batch.set(doc(db, `/sheet_refs/${this.id}`), {
