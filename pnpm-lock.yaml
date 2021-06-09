@@ -15,6 +15,7 @@ specifiers:
   firebase: ^9.0.0-beta.2
   flip-toolkit: ^7.0.13
   genid: ^0.1.0
+  interactjs: ^1.10.11
   localforage: ^1.9.0
   lodash.debounce: ^4.0.8
   lodash.isequal: ^4.5.0
@@ -37,6 +38,7 @@ dependencies:
   firebase: 9.0.0-beta.2
   flip-toolkit: 7.0.13
   genid: 0.1.0
+  interactjs: 1.10.11
   localforage: 1.9.0
   lodash.debounce: 4.0.8
   lodash.isequal: 4.5.0
@@ -501,6 +503,10 @@ packages:
     dependencies:
       lodash.camelcase: 4.3.0
       protobufjs: 6.11.2
+    dev: false
+
+  /@interactjs/types/1.10.11:
+    resolution: {integrity: sha512-YRsVFWjL8Gkkvlx3qnjeaxW4fnibSJ9791g8BA7Pv5ANByI64WmtR1vU7A2rXcrOn8XvyCEfY0ss1s8NhZP+MA==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.4:
@@ -1245,6 +1251,12 @@ packages:
 
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+
+  /interactjs/1.10.11:
+    resolution: {integrity: sha512-VPUWsGAOPmrZe1YF7Fq/4AIBBZ+3FikZRS8bpzT6VsAfUuhxl/CKJY73IAiZHd3fz9p174CXErn0Qs81XEFICA==}
+    dependencies:
+      '@interactjs/types': 1.10.11
+    dev: false
 
   /is-arrayish/0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}

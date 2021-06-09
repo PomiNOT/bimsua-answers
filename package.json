@@ -13,6 +13,7 @@
     "firebase": "^9.0.0-beta.2",
     "flip-toolkit": "^7.0.13",
     "genid": "^0.1.0",
+    "interactjs": "^1.10.11",
     "localforage": "^1.9.0",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",

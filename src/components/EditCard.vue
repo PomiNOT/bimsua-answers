@@ -12,28 +12,46 @@
             <h1 class="font-bold text-blue-800 text-2xl">{{ question }}</h1>
         </div>
         <div class="pl-3 flex-1 flex justify-center space-x-2">
-            <button type="button" @click="update('A')" class="choice-button" :class="{ 'selected': answer == 'A' }">
-                <span>A</span>
-            </button>
-            <button type="button" @click="update('B')" class="choice-button" :class="{ 'selected': answer == 'B' }">
-                <span>B</span>
-            </button>
-            <button type="button" @click="update('C')" class="choice-button" :class="{ 'selected': answer == 'C' }">
-                <span>C</span>
-            </button>
-            <button type="button" @click="update('D')" class="choice-button" :class="{ 'selected': answer == 'D' }">
-                <span>D</span>
-            </button>
+            <edit-card-button
+                @updateAnswer="updateAnswer"
+                @updateRightAnswer="updateRightAnswer"
+                choice="A"
+                :currentChoice="answer"
+                :rightChoice="rightAnswer"
+            />
+            <edit-card-button
+                @updateAnswer="updateAnswer"
+                @updateRightAnswer="updateRightAnswer"
+                choice="B"
+                :currentChoice="answer"
+                :rightChoice="rightAnswer"
+            />
+            <edit-card-button
+                @updateAnswer="updateAnswer"
+                @updateRightAnswer="updateRightAnswer"
+                choice="C"
+                :currentChoice="answer"
+                :rightChoice="rightAnswer"
+            />
+            <edit-card-button
+                @updateAnswer="updateAnswer"
+                @updateRightAnswer="updateRightAnswer"
+                choice="D"
+                :currentChoice="answer"
+                :rightChoice="rightAnswer"
+            />
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import EditCardButton from '@/components/EditCardButton.vue';
 
 export default defineComponent({
     name: 'EditCard',
-    emits: ['update:answer'],
+    emits: ['update:answer', 'update:rightAnswer'],
+    components: { EditCardButton },
     props: {
         question: {
             type: Number,
@@ -42,13 +60,23 @@ export default defineComponent({
         answer: {
             type: String,
             required: true
+        },
+        rightAnswer: {
+            type: String,
+            required: false
         }
     },
     methods: {
-        update(newAnswer: string) {
-            this.$emit('update:answer', { 
+        updateAnswer(answer: string) {
+            this.$emit('update:answer', {
                 question: this.question,
-                answer: newAnswer
+                answer
+            });
+        },
+        updateRightAnswer(answer: string) {
+            this.$emit('update:rightAnswer', {
+                question: this.question,
+                answer
             });
         }
     }
@@ -58,46 +86,5 @@ export default defineComponent({
 <style scoped>
 .edit-card:focus-within, .edit-card:focus {
     @apply ring-2 ring-blue-400 outline-none;
-}
-
-.choice-button {
-    @apply w-10 h-10 font-bold cursor-pointer grid;
-    @apply place-items-center rounded-full border-2 border-gray-400 outline-none;
-}
-
-.choice-button:focus {
-    @apply bg-gray-300 animate-pulse;
-}
-
-.selected {
-    @apply text-white bg-green-500 relative;
-}
-
-.selected:focus:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    border-radius: 50%;
-    @apply bg-green-500;
-    animation: scale 800ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.selected span {
-    z-index: 2;
-}
-
-@keyframes scale {
-    from {
-        transform: scale(1.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
 }
 </style>

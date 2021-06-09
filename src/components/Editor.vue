@@ -7,7 +7,10 @@
     >
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">{{ name }}</h1>
-        <p class="text-gray-500">{{ nQuestion }} questions</p>
+        <p class="text-gray-500">
+          <span>{{ nQuestion }} questions</span>
+          <span v-if="score > 0"> / {{ ((score / nQuestion) * 100).toFixed(1) }}% correct</span>
+        </p>
       </div>
       <div class="bg-red-500 flex items-center text-white font-bold px-2 rounded">
         <div class="rounded-full bg-white animate-pulse w-2 h-2"></div>
@@ -29,7 +32,11 @@
     >
       <template v-slot="{ index }">
         <edit-card
-          :question="index + 1" :answer="sheet[index + 1] ?? ''" @update:answer="updateAnswer"
+          :question="index + 1"
+          :answer="sheet[index + 1] ?? ''"
+          :rightAnswer="rightSheet[index + 1] ?? ''"
+          @updateAnswer="updateAnswer"
+          @updateRightAnswer="updateRightAnswer"
         />
       </template>
     </virtual-list>
@@ -134,11 +141,16 @@ import copy from 'copy-to-clipboard';
 export default defineComponent({
   name: 'Editor',
   components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
-  emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet', 'goHome'],
+  emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet', 'goHome', 'rightAnswerUpdate'],
   props: {
     sheet: {
       type: Object,
       required: true
+    },
+    rightSheet: {
+      type: Object,
+      required: false,
+      default: {}
     },
     nQuestion: {
       type: Number,
@@ -165,6 +177,17 @@ export default defineComponent({
     shareLink(): string {
       const loc = window.location;
       return `${loc.protocol}//${loc.hostname}/${this.id}`;
+    },
+    score(): number {
+      const rights = Object.keys(this.rightSheet).map((question) => {
+        return this.rightSheet[question] == this.sheet[question];
+      });
+
+      if (rights.length == 0) {
+        return 0;
+      }
+
+      return rights.reduce((count, isRight) => count + (isRight ? 1 : 0), 0);
     }
   },
   methods: {
@@ -180,6 +203,9 @@ export default defineComponent({
     deleteSheet() {
       this.$emit('deleteSheet');
       this.deleting = true;
+    },
+    updateRightAnswer(rightAnswer: any) {
+      this.$emit('rightAnswerUpdate', rightAnswer);
     },
     goHome() {
       this.$emit('goHome');

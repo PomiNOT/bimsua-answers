@@ -13,10 +13,12 @@
   <editor
     :nQuestion="nQuestion"
     :sheet="sheet"
+    :rightSheet="rightSheet"
     :name="name"
     :id="id"
     @nQuestionUpdate="updateNQuestion"
     @answerUpdate="addToUpdateQueueAndSubmit"
+    @rightAnswerUpdate="updateRightAnswer"
     @nameUpdate="updateName"
     @deleteSheet="deleteSheet"
     @goHome="$router.push('/')"
@@ -63,6 +65,7 @@ export default defineComponent({
     id: '',
     name: '',
     sheet: {} as any,
+    rightSheet: {} as any,
     changes: {} as any,
     batch: 0,
     unsubscribe: null as Function | null,
@@ -83,6 +86,12 @@ export default defineComponent({
           nQuestion: newnQuestion
         })
       ])
+    },
+
+    async updateRightAnswer(newRightAnswer: any) {
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        [`rightSheet.${newRightAnswer.question}`]: newRightAnswer.answer
+      });
     },
     
     addToUpdateQueueAndSubmit(ans: any) {
@@ -105,8 +114,6 @@ export default defineComponent({
           batchChanges[keyNameWithNumberRemoved] = this.changes[key];
           delete this.changes[key];
         });
-
-      console.log(batchChanges);
 
       this.batch++;
 
@@ -221,6 +228,7 @@ export default defineComponent({
       const docData = snap.data();
 
       this.sheet = docData?.sheet;
+      this.rightSheet = docData?.rightSheet;
       this.name = docData?.name;
       this.nQuestion = docData?.nQuestion;
       this.loadingDone = true;
