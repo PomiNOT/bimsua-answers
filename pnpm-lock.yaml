@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@tailwindcss/aspect-ratio': ^0.2.0
+  '@types/hammerjs': ^2.0.39
   '@types/lodash.debounce': ^4.0.6
   '@types/lodash.isequal': ^4.5.5
   '@types/lodash.throttle': ^4.1.6
@@ -15,7 +16,7 @@ specifiers:
   firebase: 9.0.0-beta.2
   flip-toolkit: ^7.0.13
   genid: ^0.1.0
-  interactjs: ^1.10.11
+  hammerjs: ^2.0.8
   localforage: ^1.9.0
   lodash.debounce: ^4.0.8
   lodash.isequal: ^4.5.0
@@ -38,7 +39,7 @@ dependencies:
   firebase: 9.0.0-beta.2
   flip-toolkit: 7.0.13
   genid: 0.1.0
-  interactjs: 1.10.11
+  hammerjs: 2.0.8
   localforage: 1.9.0
   lodash.debounce: 4.0.8
   lodash.isequal: 4.5.0
@@ -49,6 +50,7 @@ dependencies:
   vue-router: 4.0.6_vue@3.0.11
 
 devDependencies:
+  '@types/hammerjs': 2.0.39
   '@types/lodash.debounce': 4.0.6
   '@types/lodash.isequal': 4.5.5
   '@types/lodash.throttle': 4.1.6
@@ -505,10 +507,6 @@ packages:
       protobufjs: 6.11.2
     dev: false
 
-  /@interactjs/types/1.10.11:
-    resolution: {integrity: sha512-YRsVFWjL8Gkkvlx3qnjeaxW4fnibSJ9791g8BA7Pv5ANByI64WmtR1vU7A2rXcrOn8XvyCEfY0ss1s8NhZP+MA==}
-    dev: false
-
   /@nodelib/fs.scandir/2.1.4:
     resolution: {integrity: sha512-33g3pMJk3bg5nXbL/+CY6I2eJDzZAni49PfJnL5fghPTggPvBd/pFNSgJsdAgWptuFu7qq/ERvOYFlhvsLTCKA==}
     engines: {node: '>= 8'}
@@ -576,6 +574,10 @@ packages:
   /@tailwindcss/aspect-ratio/0.2.0:
     resolution: {integrity: sha512-v5LyHkwXj/4lI74B06zUrmWEdmSqS43+jw717pkt3fAXqb7ALwu77A8t7j+Bej+ZbdlIIqNMYheGN7wSGV1A6w==}
     dev: false
+
+  /@types/hammerjs/2.0.39:
+    resolution: {integrity: sha512-lYR2Y/tV2ujpk/WyUc7S0VLI0a9hrtVIN9EwnrNo5oSEJI2cK2/XrgwOQmXLL3eTulOESvh9qP6si9+DWM9cOA==}
+    dev: true
 
   /@types/lodash.debounce/4.0.6:
     resolution: {integrity: sha512-4WTmnnhCfDvvuLMaF3KV4Qfki93KebocUF45msxhYyjMttZDQYzHkO639ohhk8+oco2cluAFL3t5+Jn4mleylQ==}
@@ -1188,6 +1190,11 @@ packages:
     resolution: {integrity: sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==}
     dev: true
 
+  /hammerjs/2.0.8:
+    resolution: {integrity: sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=}
+    engines: {node: '>=0.8.0'}
+    dev: false
+
   /has-flag/3.0.0:
     resolution: {integrity: sha1-tdRU3CGZriJWmfNGfloH87lVuv0=}
     engines: {node: '>=4'}
@@ -1251,12 +1258,6 @@ packages:
 
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
-
-  /interactjs/1.10.11:
-    resolution: {integrity: sha512-VPUWsGAOPmrZe1YF7Fq/4AIBBZ+3FikZRS8bpzT6VsAfUuhxl/CKJY73IAiZHd3fz9p174CXErn0Qs81XEFICA==}
-    dependencies:
-      '@interactjs/types': 1.10.11
-    dev: false
 
   /is-arrayish/0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}

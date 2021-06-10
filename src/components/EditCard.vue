@@ -3,7 +3,7 @@
         class="
             rounded-lg divide-x divide-gray-300 focus-within:divide-white
             flex items-center
-            bg-gray-200 p-3 edit-card
+            bg-gray-200 p-3 edit-card select-none
         "
         tabindex="0"
     >

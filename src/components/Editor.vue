@@ -144,7 +144,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Snackbar from '@/components/Snackbar.vue';
 import EditCard from '@/components/EditCard.vue';
 import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
@@ -154,7 +153,7 @@ import copy from 'copy-to-clipboard';
 
 export default defineComponent({
   name: 'Editor',
-  components: { Snackbar, EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
+  components: { EditCard, FloatingMenu, FloatingMenuPage, FadeTransition, VirtualList },
   emits: ['answerUpdate', 'nQuestionUpdate', 'nameUpdate', 'deleteSheet', 'goHome', 'rightAnswerUpdate'],
   props: {
     sheet: {

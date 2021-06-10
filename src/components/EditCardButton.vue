@@ -4,7 +4,7 @@
     class="
       font-bold focus:outline-none focus:bg-gray-300
       rounded-full w-9 h-9 border-2 border-gray-400
-      select-none
+      select-none touch-manipulation
     "
     :class="determineColor"
   >
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import interact from 'interactjs';
+import Hammer from 'hammerjs';
 
 export default defineComponent({
   name: 'EditCardButton',
@@ -34,7 +34,7 @@ export default defineComponent({
     }
   },
   data: () => ({
-    interactable: null as any
+    hammer: null as null | HammerManager
   }),
   computed: {
     determineColor(): Object {
@@ -44,41 +44,48 @@ export default defineComponent({
       
       if (!rightChoicePassed) {
         return {
-          'bg-blue-400 focus:bg-blue-500 text-white border-blue-400': selected
+          'selected-color': selected
         };
       } else {
         return {
-          'border-green-400 focus:bg-green-500 text-white bg-green-400': isRightChoice,
+          'right-choice-color': isRightChoice,
           'erased': isRightChoice && !this.currentChoice,
-          'border-gray-300 text-white erased opacity-20 focus:bg-gray-300 bg-gray-400': selected && !isRightChoice
+          'wrong-choice-color erased': selected && !isRightChoice
         };
       }
     }
   },
+  methods: {
+    tapHandler() {
+      const rightChoicePassed = !!this.rightChoice;
+
+      if (!rightChoicePassed) {
+        this.$emit('updateAnswer', this.choice);
+      }  
+    },
+    doubleTapHandler() {
+      const isRightChoice = this.rightChoice == this.choice;
+
+      if (isRightChoice) {
+        this.$emit('updateRightAnswer', '');
+      }
+      else {
+        this.$emit('updateRightAnswer', this.choice);
+      }
+    }
+  },
   mounted() {
-    this.interactable = interact(this.$el)
-        .on('tap', (e) => {
-          e.preventDefault();
-          const rightChoicePassed = !!this.rightChoice;
+    this.hammer = new Hammer.Manager(this.$el);
+    const tap = new Hammer.Tap({ event: 'tap' });
+    const press = new Hammer.Press({ event: 'press' });
+    this.hammer.add([press, tap]);
 
-          if (!rightChoicePassed) {
-            this.$emit('updateAnswer', this.choice);
-          }  
-        })
-        .on('hold', (e) => {
-          e.preventDefault();
-          const isRightChoice = this.rightChoice == this.choice;
-
-          if (isRightChoice) {
-            this.$emit('updateRightAnswer', '');
-          }
-          else {
-            this.$emit('updateRightAnswer', this.choice);
-          }
-        })
+    this.hammer.on('tap', this.tapHandler);
+    this.hammer.on('press', this.doubleTapHandler);
   },
   beforeUnmount() {
-    this.interactable.off('hold').off('tap');
+    this.hammer?.off('tap', this.tapHandler);
+    this.hammer?.off('press', this.doubleTapHandler);
   }
 });
 </script>
@@ -108,5 +115,21 @@ export default defineComponent({
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
   @apply rounded-md bg-black;
+}
+
+.selected-color {
+  @apply bg-blue-400 focus:bg-blue-500 text-white border-blue-400;
+}
+
+.right-choice-color {
+  @apply border-green-400 focus:bg-green-500 text-white bg-green-400;
+}
+
+.wrong-choice-color {
+  @apply border-gray-300 text-white opacity-20 focus:bg-gray-300 bg-gray-400;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
 }
 </style>
