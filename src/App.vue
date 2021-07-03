@@ -4,15 +4,21 @@
       <component :is="Component" />
     </fade-transition>
   </router-view>
+
+  <snackbar v-model="showUpdateSnack" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
+import Snackbar from '@/components/UpdateSnack.vue';
 
 export default defineComponent({
-  components: { FadeTransition },
+  components: { FadeTransition, Snackbar },
   name: "App",
+  data: () => ({
+    showUpdateSnack: false
+  }),
   mounted() {
     //Copied from postcss-viewport-height-correction's github
     var customViewportCorrectionVariable = "vh";
@@ -35,9 +41,36 @@ export default defineComponent({
       "resize",
       setViewportProperty(document.documentElement)
     );
+
+    setTimeout(() => this.showUpdateSnack = true, 1000);
   },
 });
 </script>
 
 <style>
+.firebase-emulator-warning {
+  width: 200px !important;
+  bottom: 5px !important;
+  left: 5px !important;
+  top: 5px !important;
+  bottom: initial !important;
+  padding: 5px;
+  transform-origin: center;
+  pointer-events: none;
+  touch-action: none;
+  animation: disappear forwards;
+  animation-duration: 300ms;
+  animation-delay: 6s;
+  @apply rounded-lg bg-white shadow font-bold;
+}
+
+@keyframes disappear {
+ from {
+   opacity: 1;
+ }
+ to {
+   opacity: 0;
+   transform: scale(0);
+ }
+}
 </style>
