@@ -18,6 +18,11 @@ export default defineComponent({
     flipKey: {
       type: [String, Number, Boolean, Object],
       required: true
+    },
+    delay: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data: () => ({
@@ -44,7 +49,8 @@ export default defineComponent({
         this.flippingInstance?.addFlipped({
           element: flipElement as HTMLElement,
           flipId: (flipElement as HTMLElement).dataset.flipKey,
-          children: null
+          children: null,
+          spring: this.spring
         });
 
         flipElement

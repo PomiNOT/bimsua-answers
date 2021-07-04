@@ -1,21 +1,30 @@
 <template>
   <bounce-transition>
-    <div v-if="modelValue" class="fixed bottom-5 px-2 w-full flex justify-center" style="z-index: 200;">
-      <div class="
-        bg-white bg-opacity-70 backdrop-filter backdrop-blur-md
+    <div
+      style="z-index: 200;"
+      class="
+        bg-white bg-opacity-50 backdrop-filter backdrop-blur-md
         shadow-lg px-3 h-9 rounded-lg font-bold text-blue-800
-        overflow-hidden
-      " data-flip-key="snack">
+        overflow-hidden select-none cursor-pointer transition-all duration-300
+        fixed bottom-5 right-5
+      "
+      :class="shrink ? 'w-36' : 'w-72'"
+      v-if="modelValue"
+      title="Click to update to the latest version."
+    >
+      <div class="h-full" data-inverse-flip>
         <div
           class="h-full transition-transform duration-300"
           :style="`transform: translateY(-${page*100}%)`"
-          data-inverse-flip
         >
-          <div class="h-full flex items-center">
+          <div class="h-full flex items-center" :class="{ 'no-width': shrink }">
             <span class="mr-2">🎉</span> A new version is available!
           </div>
+          <div class="h-full flex items-center" :class="{ 'no-width': shrink }">
+            <span class="mr-2">👆</span> Refresh or click here.
+          </div>
           <div class="h-full flex items-center">
-            <span class="mr-2">🔄</span> Click here to refresh
+            <span class="mr-2">🔄</span> Update app
           </div>
         </div>
       </div>
@@ -26,6 +35,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
+import localforage from 'localforage';
 
 export default defineComponent({
   name: 'UpdateSnack',
@@ -38,11 +48,31 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   data: () => ({
-    page: 0
+    page: 0,
+    shrink: false
   }),
-  mounted() {
-    setTimeout(() => this.page++, 5000);
-    setTimeout(() => this.$emit('update:modelValue', false), 10000);
+  async beforeMount() {
+    const viewedAnimation = await localforage.getItem('playedUpdateAnimation');
+    if (viewedAnimation && import.meta.env.PROD) {
+      this.page = 2;
+      this.shrink = true;
+    }
+  },
+  async mounted() {
+    const viewedAnimation = await localforage.getItem('playedUpdateAnimation');
+    if (!viewedAnimation || import.meta.env.DEV) {
+      setTimeout(() => this.page++, 5000);
+      setTimeout(() => this.page++, 8000);
+      setTimeout(() => this.shrink = true, 8500);
+    }
+    localforage.setItem('playedUpdateAnimation', true);
   }
 });
 </script>
+
+<style scoped>
+.no-width {
+  width: 0;
+  white-space: nowrap;
+}
+</style>
