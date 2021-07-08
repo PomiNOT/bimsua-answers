@@ -26,6 +26,9 @@
           <div class="h-full flex items-center">
             <span class="mr-2">🔄</span> Update app
           </div>
+          <div class="h-full flex items-center">
+            <span class="mr-2">🥳</span> App updated!
+          </div>
         </div>
       </div>
     </div>
@@ -33,39 +36,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import BounceTransition from '@/components/common-transitions/BounceTransition.vue';
-import localforage from 'localforage';
+
+export enum UpdateSnackStatus {
+  STATUS_NEW_UPDATE,
+  STATUS_SEEN_UPDATE,
+  STATUS_UP_TO_DATE
+}
 
 export default defineComponent({
   name: 'UpdateSnack',
   components: { BounceTransition },
   props: {
-    modelValue: {
-      type: Boolean,
+    status: {
+      type: Number as PropType<UpdateSnackStatus>,
       required: true
     }
   },
-  emits: ['update:modelValue'],
   data: () => ({
     page: 0,
     shrink: false
   }),
   async beforeMount() {
-    const viewedAnimation = await localforage.getItem('playedUpdateAnimation');
-    if (viewedAnimation && import.meta.env.PROD) {
+    if (this.status == UpdateSnackStatus.STATUS_SEEN_UPDATE) {
       this.page = 2;
+      this.shrink = true;
+    } else if (this.status == UpdateSnackStatus.STATUS_UP_TO_DATE) {
+      this.page = 3;
       this.shrink = true;
     }
   },
   async mounted() {
-    const viewedAnimation = await localforage.getItem('playedUpdateAnimation');
-    if (!viewedAnimation || import.meta.env.DEV) {
+    if (this.status == UpdateSnackStatus.STATUS_NEW_UPDATE) {
       setTimeout(() => this.page++, 5000);
       setTimeout(() => this.page++, 8000);
       setTimeout(() => this.shrink = true, 8500);
     }
-    localforage.setItem('playedUpdateAnimation', true);
   }
 });
 </script>

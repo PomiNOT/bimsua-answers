@@ -2,7 +2,6 @@
 //This virtual list works on whole page only.
 
 import { defineComponent, h } from 'vue';
-import ScrollParent from 'scrollparent';
 import throttle from 'lodash.throttle';
 
 export default defineComponent({
@@ -59,7 +58,7 @@ export default defineComponent({
   },
   data: () => ({
     visibleRows: [] as number[],
-    scrollTarget: null as null | any,
+    scrollTarget: null as HTMLElement | null,
     columns: 2,
     called: 0,
     updateVisibleRowsThrottled: null as null | Function
@@ -86,29 +85,17 @@ export default defineComponent({
 
       const visibleCount = Math.floor(windowSize / this.itemHeight) + 1;
       const startIndex = Math.floor(windowStart / this.itemHeight);
-      
+
       this.visibleRows = Array.from({ length: visibleCount }, (_, i) => startIndex + i);
     },
-
-    //Taken from https://github.com/Akryum/vue-virtual-scroller/blob/master/src/components/RecycleScroller.vue line 493
-    getListenerTarget () {
-      let target: any = ScrollParent(this.$el);
-      // Fix global scroll target for Chrome and Safari
-      if (window.document && (target === window.document.documentElement || target === window.document.body)) {
-        target = window;
-      }
-
-      this.scrollTarget = target;
-    },
-
     indices(from: number, to: number): number[] {
       to = Math.min(to, this.length);
       return Array.from({length: to - from}, (_, i) => from + i);
     },
     determineScreenLevel(): number {
-      if (window.innerWidth < 640) { 
+      if (window.innerWidth < 640) {
         return 0;
-      } else if (window.innerWidth < 768) { 
+      } else if (window.innerWidth < 768) {
         return 1;
       } else if (window.innerWidth < 1024) {
         return 2;
@@ -123,7 +110,7 @@ export default defineComponent({
       const columnSizePerLevel = [p['cols'], p['colsSm'], p['colsMd'], p['colsLg'], p['colsXl']];
       const screenLevel = this.determineScreenLevel();
       let columnSizeForLevel = columnSizePerLevel[screenLevel];
-      
+
       //Means not set
       if (columnSizeForLevel == -1) {
         for (let lvl = screenLevel; lvl >= 0; lvl--) {
@@ -147,10 +134,10 @@ export default defineComponent({
         (rowIndex, i) => {
           return h(
             'div',
-            { 
+            {
               style: `
               position: absolute;
-              width: 100%; 
+              width: 100%;
               transform: translateY(${rowIndex * this.itemHeight}px);
               display: grid;
               grid-template-columns: repeat(${this.columns}, 1fr);
@@ -178,23 +165,16 @@ export default defineComponent({
     },
     bufferHeight() {
       this.updateVisibleRows();
-    },
-    columns(newCols, oldCols) {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const previouslyLookedAt = Math.floor((scrollTop / this.itemHeight) * oldCols);
-      const thatElementRowNow = Math.floor(previouslyLookedAt / newCols);
-      this.scrollTarget.scrollTo(0, thatElementRowNow * this.itemHeight);
     }
   },
   mounted() {
-    this.getListenerTarget();
     this.updateVisibleRowsThrottled = throttle(this.updateVisibleRows.bind(this), 100);
 
     window.addEventListener('resize', this.updateVisibleRowsThrottled as any);
     window.addEventListener('resize', this.resizeGrid);
-    this.scrollTarget.addEventListener(
+    window.addEventListener(
       'scroll',
-      this.updateVisibleRowsThrottled as any, 
+      this.updateVisibleRowsThrottled as any,
       { passive: true }
     );
 
@@ -204,7 +184,7 @@ export default defineComponent({
   beforeUnmount() {
     window.removeEventListener('resize', this.resizeGrid);
     window.removeEventListener('resize', this.updateVisibleRowsThrottled as any);
-    this.scrollTarget.removeEventListener('scroll', this.updateVisibleRowsThrottled as any);
+    window.removeEventListener('scroll', this.updateVisibleRowsThrottled as any);
   }
 });
 </script>

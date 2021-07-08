@@ -5,44 +5,53 @@
     </fade-transition>
   </router-view>
 
-  <snackbar v-model="showUpdateSnack" />
+  <snackbar v-if="showUpdateSnack" :status="updateStatus" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
-import Snackbar from '@/components/UpdateSnack.vue';
+import Snackbar, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
 
 export default defineComponent({
   components: { FadeTransition, Snackbar },
   name: "App",
   data: () => ({
-    showUpdateSnack: false
+    updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE
   }),
-  mounted() {
-    //Copied from postcss-viewport-height-correction's github
-    var customViewportCorrectionVariable = "vh";
+  methods: {
+    installViewportCorrectionPlugin() {
+      //Copied from postcss-viewport-height-correction's github
+      var customViewportCorrectionVariable = "vh";
 
-    function setViewportProperty(doc: HTMLElement) {
-      var prevClientHeight: any;
-      var customVar = "--" + (customViewportCorrectionVariable || "vh");
-      function handleResize() {
-        var clientHeight = doc.clientHeight;
-        if (clientHeight === prevClientHeight) return;
-        requestAnimationFrame(function updateViewportHeight() {
-          doc.style.setProperty(customVar, clientHeight * 0.01 + "px");
-          prevClientHeight = clientHeight;
-        });
+      function setViewportProperty(doc: HTMLElement) {
+        var prevClientHeight: any;
+        var customVar = "--" + (customViewportCorrectionVariable || "vh");
+        function handleResize() {
+          var clientHeight = doc.clientHeight;
+          if (clientHeight === prevClientHeight) return;
+          requestAnimationFrame(function updateViewportHeight() {
+            doc.style.setProperty(customVar, clientHeight * 0.01 + "px");
+            prevClientHeight = clientHeight;
+          });
+        }
+        handleResize();
+        return handleResize;
       }
-      handleResize();
-      return handleResize;
-    }
-    window.addEventListener(
-      "resize",
-      setViewportProperty(document.documentElement)
-    );
 
-    setTimeout(() => this.showUpdateSnack = true, 1000);
+      window.addEventListener(
+        "resize",
+        setViewportProperty(document.documentElement)
+      );
+    }
+  },
+  computed: {
+    showUpdateSnack(): boolean {
+      return this.$route.name == 'Home';
+    }
+  },
+  mounted() {
+    this.installViewportCorrectionPlugin();
   },
 });
 </script>

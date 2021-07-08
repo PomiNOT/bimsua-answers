@@ -27,7 +27,7 @@ export default defineComponent({
   },
   data: () => ({
     flippingInstance: null as Flipper | null,
-    oldFlipKey: null as any | null
+    oldFlipKey: null as string | number | boolean | object | null
   }),
   beforeUpdate() {
     this.flippingInstance?.recordBeforeUpdate();
@@ -37,7 +37,7 @@ export default defineComponent({
       if (!isEqual(this.oldFlipKey, this.flipKey)) {
         this.updateFlipList();
         this.flippingInstance?.update(null, null);
-        this.oldFlipKey = this.flipKey;
+        this.oldFlipKey = this.flipKey as string | number | boolean | object | null;
       }
     });
   },

@@ -6,8 +6,8 @@
         bg-gray-200 bg-opacity-50 transition-all duration-300
         h-18 p-2 flex items-center
       "
-      :class="score > 0 ? 'py-4' : 'py-2'" 
-    > 
+      :class="score > 0 ? 'py-4' : 'py-2'"
+    >
       <div class="flex-1 leading-tight">
         <h1 class="text-blue-800 font-bold">{{ name }}</h1>
         <p class="text-gray-500">
@@ -89,7 +89,7 @@
           <button type="button" @click="menuExpanded = false">Return</button>
         </template>
       </floating-menu-page>
-      
+
       <floating-menu-page
         title="Editing sheet's name"
         subtitle="Click Save when you're done"
@@ -150,6 +150,7 @@ import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import FadeTransition from './common-transitions/FadeTransition.vue';
 import VirtualList from '@/components/VirtualList.vue';
 import copy from 'copy-to-clipboard';
+import { Answer } from '@/types';
 
 export default defineComponent({
   name: 'Editor',
@@ -206,7 +207,7 @@ export default defineComponent({
     }
   },
   methods: {
-    updateAnswer(ans: any) {
+    updateAnswer(ans: Answer) {
       this.$emit('answerUpdate', ans);
     },
     updateNQuestion() {
@@ -219,7 +220,7 @@ export default defineComponent({
       this.$emit('deleteSheet');
       this.deleting = true;
     },
-    updateRightAnswer(rightAnswer: any) {
+    updateRightAnswer(rightAnswer: Answer) {
       this.$emit('rightAnswerUpdate', rightAnswer);
     },
     goHome() {

@@ -41,7 +41,7 @@ export default defineComponent({
       const isRightChoice = this.rightChoice == this.choice;
       const selected = this.choice == this.currentChoice;
       const rightChoicePassed = !!this.rightChoice;
-      
+
       if (!rightChoicePassed) {
         return {
           'selected-color': selected
@@ -61,9 +61,9 @@ export default defineComponent({
 
       if (!rightChoicePassed) {
         this.$emit('updateAnswer', this.choice);
-      }  
+      }
     },
-    doubleTapHandler() {
+    pressHandler() {
       const isRightChoice = this.rightChoice == this.choice;
 
       if (isRightChoice) {
@@ -81,11 +81,11 @@ export default defineComponent({
     this.hammer.add([press, tap]);
 
     this.hammer.on('tap', this.tapHandler);
-    this.hammer.on('press', this.doubleTapHandler);
+    this.hammer.on('press', this.pressHandler);
   },
   beforeUnmount() {
     this.hammer?.off('tap', this.tapHandler);
-    this.hammer?.off('press', this.doubleTapHandler);
+    this.hammer?.off('press', this.pressHandler);
   }
 });
 </script>

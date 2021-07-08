@@ -32,7 +32,7 @@ import TwoEndsProgress from '@/components/TwoEndsProgress.vue';
 import Editor from '@/components/Editor.vue';
 
 import { auth, db, analytics } from '@/firebaseApp';
-import { 
+import {
   setPersistence,
   signInAnonymously,
   browserLocalPersistence,
@@ -45,7 +45,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 
-import { DEFAULT_NAME } from '@/types';
+import { Answer, DEFAULT_NAME } from '@/types';
 import RecentsDatabase from '@/recentsdb';
 import localForage from 'localforage';
 import genid from 'genid';
@@ -88,13 +88,13 @@ export default defineComponent({
       ])
     },
 
-    async updateRightAnswer(newRightAnswer: any) {
+    async updateRightAnswer(newRightAnswer: Answer) {
       await updateDoc(doc(db, this.getPathForSheet()), {
         [`rightSheet.${newRightAnswer.question}`]: newRightAnswer.answer
       });
     },
-    
-    addToUpdateQueueAndSubmit(ans: any) {
+
+    addToUpdateQueueAndSubmit(ans: Answer) {
       this.changes[`sheet.${ans.question}.${this.batch}`] = ans.answer;
       this.sheet[ans.question] = ans.answer;
       this.submitAnswersDebounced?.();
@@ -192,7 +192,7 @@ export default defineComponent({
         resolve(null);
       });
     });
-    
+
     this.state++;
 
     if (creating) {

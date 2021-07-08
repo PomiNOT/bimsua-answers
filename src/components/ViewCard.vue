@@ -22,7 +22,7 @@ export default defineComponent({
   },
   data: () => ({
     highlighted: false,
-    timeout: null as any
+    timeout: null as number | null
   }),
   watch: {
     answer() {
