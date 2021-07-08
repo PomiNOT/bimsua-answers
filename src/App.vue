@@ -5,7 +5,7 @@
     </fade-transition>
   </router-view>
 
-  <snackbar v-if="showUpdateSnack" :status="updateStatus" />
+  <snackbar :visible="showUpdateSnack" :status="updateStatus" />
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
         class="
             rounded-lg divide-x divide-gray-300 focus-within:divide-white
             flex items-center

@@ -207,8 +207,8 @@ export default defineComponent({
     }
   },
   methods: {
-    updateAnswer(ans: Answer) {
-      this.$emit('answerUpdate', ans);
+    updateAnswer(ans: unknown) {
+      this.$emit('answerUpdate', ans as Answer);
     },
     updateNQuestion() {
       this.$emit('nQuestionUpdate', this.newnQuestion);
@@ -220,8 +220,8 @@ export default defineComponent({
       this.$emit('deleteSheet');
       this.deleting = true;
     },
-    updateRightAnswer(rightAnswer: Answer) {
-      this.$emit('rightAnswerUpdate', rightAnswer);
+    updateRightAnswer(rightAnswer: unknown) {
+      this.$emit('rightAnswerUpdate', rightAnswer as Answer);
     },
     goHome() {
       this.$emit('goHome');

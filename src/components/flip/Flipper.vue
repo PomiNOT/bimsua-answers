@@ -16,7 +16,7 @@ export default defineComponent({
       required: false
     },
     flipKey: {
-      type: [String, Number, Boolean, Object],
+      type: [String, Number, Boolean, Array],
       required: true
     },
     delay: {
@@ -27,7 +27,7 @@ export default defineComponent({
   },
   data: () => ({
     flippingInstance: null as Flipper | null,
-    oldFlipKey: null as string | number | boolean | object | null
+    oldFlipKey: null as string | number | boolean | any[] | null
   }),
   beforeUpdate() {
     this.flippingInstance?.recordBeforeUpdate();
@@ -37,7 +37,7 @@ export default defineComponent({
       if (!isEqual(this.oldFlipKey, this.flipKey)) {
         this.updateFlipList();
         this.flippingInstance?.update(null, null);
-        this.oldFlipKey = this.flipKey as string | number | boolean | object | null;
+        this.oldFlipKey = this.flipKey as string | number | any[] | null;
       }
     });
   },

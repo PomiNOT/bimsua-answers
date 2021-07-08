@@ -9,7 +9,7 @@
         fixed bottom-5 right-5
       "
       :class="shrink ? 'w-36' : 'w-72'"
-      v-if="modelValue"
+      v-if="visible"
       title="Click to update to the latest version."
     >
       <div class="h-full" data-inverse-flip>
@@ -51,6 +51,10 @@ export default defineComponent({
   props: {
     status: {
       type: Number as PropType<UpdateSnackStatus>,
+      required: true
+    },
+    visible: {
+      type: Boolean,
       required: true
     }
   },
