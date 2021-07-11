@@ -1,38 +1,44 @@
 <template>
-  <bounce-transition>
-    <div
-      style="z-index: 200;"
-      class="
-        bg-white bg-opacity-50 backdrop-filter backdrop-blur-md
-        shadow-lg px-3 h-9 rounded-lg font-bold text-blue-800
-        overflow-hidden select-none cursor-pointer transition-all duration-300
-        fixed bottom-5 right-5
-      "
-      :class="shrink ? 'w-36' : 'w-72'"
-      v-if="visible"
-      title="Click to update to the latest version."
-    >
-      <div class="h-full" data-inverse-flip>
-        <div
-          class="h-full transition-transform duration-300"
-          :style="`transform: translateY(-${page*100}%)`"
+  <teleport to="body">
+    <bounce-transition>
+      <div v-if="visible" class="fixed inline-flex bottom-5 right-5" style="z-index: 200;">
+        <button
+          type="button"
+          @click="$emit('click')"
+          class="
+            bg-white
+            shadow-lg px-3 h-9 rounded-lg font-bold text-blue-800
+            overflow-hidden select-none ease-out-sine
+            transition-sizing duration-300
+            focus:outline-none focus:ring focus:ring-gray-300
+            active:bg-gray-200
+          "
+          :class="shrink ? (status == 2 ? 'w-38' : 'w-10') : 'w-72'"
+          title="Click to update to the latest version."
         >
-          <div class="h-full flex items-center" :class="{ 'no-width': shrink }">
-            <span class="mr-2">🎉</span> A new version is available!
+          <div class="h-full">
+            <div
+              class="h-full transition-transform duration-300 whitespace-nowrap"
+              :style="`transform: translateY(-${page*100}%)`"
+            >
+              <div class="h-full flex items-center" :class="{ 'w-0': shrink }">
+                <span class="mr-2">🎉</span> A new version is available!
+              </div>
+              <div class="h-full flex items-center" :class="{ 'w-0': shrink }">
+                <span class="mr-2">👆</span> Refresh or click here.
+              </div>
+              <div class="h-full flex items-center">
+                <span class="mr-2">🔄</span>
+              </div>
+              <div class="h-full flex items-center">
+                <span class="mr-2">🥳</span> Up to date!
+              </div>
+            </div>
           </div>
-          <div class="h-full flex items-center" :class="{ 'no-width': shrink }">
-            <span class="mr-2">👆</span> Refresh or click here.
-          </div>
-          <div class="h-full flex items-center">
-            <span class="mr-2">🔄</span> Update app
-          </div>
-          <div class="h-full flex items-center">
-            <span class="mr-2">🥳</span> App updated!
-          </div>
-        </div>
+        </button>
       </div>
-    </div>
-  </bounce-transition>
+    </bounce-transition>
+  </teleport>
 </template>
 
 <script lang="ts">
@@ -48,6 +54,7 @@ export enum UpdateSnackStatus {
 export default defineComponent({
   name: 'UpdateSnack',
   components: { BounceTransition },
+  emits: ['click'],
   props: {
     status: {
       type: Number as PropType<UpdateSnackStatus>,
@@ -60,30 +67,27 @@ export default defineComponent({
   },
   data: () => ({
     page: 0,
-    shrink: false
+    shrink: false,
+    timeouts: [] as number[]
   }),
-  async beforeMount() {
-    if (this.status == UpdateSnackStatus.STATUS_SEEN_UPDATE) {
-      this.page = 2;
-      this.shrink = true;
-    } else if (this.status == UpdateSnackStatus.STATUS_UP_TO_DATE) {
-      this.page = 3;
-      this.shrink = true;
-    }
-  },
-  async mounted() {
-    if (this.status == UpdateSnackStatus.STATUS_NEW_UPDATE) {
-      setTimeout(() => this.page++, 5000);
-      setTimeout(() => this.page++, 8000);
-      setTimeout(() => this.shrink = true, 8500);
+  watch: {
+    status() {
+      this.timeouts.forEach(clearTimeout);
+
+      if (this.status == UpdateSnackStatus.STATUS_SEEN_UPDATE) {
+        this.page = 2;
+        this.shrink = true;
+      } else if (this.status == UpdateSnackStatus.STATUS_UP_TO_DATE) {
+        this.page = 3;
+        this.shrink = true;
+      }
+
+      if (this.status == UpdateSnackStatus.STATUS_NEW_UPDATE) {
+        this.timeouts[0] = setTimeout(() => this.page++, 3000);
+        this.timeouts[1] = setTimeout(() => this.page++, 6000);
+        this.timeouts[2] = setTimeout(() => this.shrink = true, 6500);
+      }
     }
   }
 });
 </script>
-
-<style scoped>
-.no-width {
-  width: 0;
-  white-space: nowrap;
-}
-</style>

@@ -12,9 +12,9 @@
             <flipper :flip-key="menuExpanded">
               <floating-menu v-model:expanded="menuExpanded">
                 <template #small>
-                  <button 
+                  <button
                     data-flip-key="dialog"
-                    type="button" 
+                    type="button"
                     v-show="recents.length > 0"
                     @click="menuExpanded = true"
                     class="btn btn-white"
@@ -29,10 +29,10 @@
                   subtitle="Continue editing one of your recent sheets."
                 >
                   <div class="space-y-2 max-h-36 overflow-y-auto">
-                    <button 
+                    <button
                       class="w-full flex bg-white bg-opacity-30"
                       v-for="{ id, name, nQuestion } in recents"
-                      @click="resume(id)" 
+                      @click="resume(id)"
                       :key="id"
                     >
                       <p class="flex-1">{{ name }}</p>
@@ -44,7 +44,7 @@
                   </template>
                 </floating-menu-page>
               </floating-menu>
-            
+
               <button data-flip-key="create" type="button" @click="showForm = true" class="btn">
                 Create new!
               </button>
@@ -58,12 +58,12 @@
           </div>
         </div>
       </div>
-      
+
       <form class="px-4 flex flex-col w-full sm:w-3/4 md:w-1/2 max-w-lg" v-else>
         <div class="text-center flex flex-col items-center">
           <div class="transform origin-center -rotate-12 scale-75">
             <illustration />
-            <div 
+            <div
               class="absolute grid place-items-center bottom-0 right-0 text-xl
                       transform translate-x-1/3 translate-y-1/3 w-7 h-7 leading-none
                       font-mono rounded-full text-white bg-green-600"
@@ -88,6 +88,12 @@
         </div>
       </form>
     </bounce-transition>
+
+    <update-snack
+      :visible="!showForm && updateSnackVisible"
+      :status="updateStatus"
+      @click="refresh"
+    />
   </div>
 </template>
 
@@ -99,18 +105,24 @@ import FloatingMenu from '@/components/FloatingMenu.vue';
 import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import RecentsDatabase from '@/recentsdb';
+import UpdateSnack, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
 
 import { DEFAULT_NAME, Sheet } from '@/types';
 
 export default defineComponent({
   name: 'HomeScreen',
-  components: { Illustration, Flipper, BounceTransition, FloatingMenu, FloatingMenuPage },
+  components: {
+    Illustration, Flipper, BounceTransition, FloatingMenu, FloatingMenuPage,
+    UpdateSnack
+  },
   data: () => ({
     showForm: false,
+    updateSnackVisible: false,
     sheetName: DEFAULT_NAME,
     nQuestion: 5,
     recents: [] as Sheet[],
-    menuExpanded: false
+    menuExpanded: false,
+    updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE
   }),
   methods: {
     createNew() {
@@ -134,11 +146,21 @@ export default defineComponent({
           continueId: id!
         }
       });
+    },
+    refresh() {
+      window.location.reload();
+    },
+    checkForUpdate() {
+      setTimeout(() => {
+        this.updateStatus = UpdateSnackStatus.STATUS_UP_TO_DATE;
+        this.updateSnackVisible = true;
+      }, 1000);
     }
   },
   async mounted() {
     const recentsdb = new RecentsDatabase();
     this.recents = await recentsdb.recents.toArray();
+    this.checkForUpdate();
   }
 });
 </script>

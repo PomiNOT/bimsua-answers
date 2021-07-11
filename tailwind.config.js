@@ -12,11 +12,15 @@ module.exports = {
     },
     extend: {
       transitionTimingFunction: {
-        'bouncy': 'cubic-bezier(0.68, -0.6, 0.32, 1.6)'
+        'bouncy': 'cubic-bezier(0.68, -0.6, 0.32, 1.6)',
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)'
       },
       animation: {
         'slidein': 'slidein 200ms forwards',
         'hover': 'hover 6s infinite ease-in-out'
+      },
+      transitionProperty: {
+        'sizing': 'width,height'
       }
     },
   },

@@ -4,21 +4,15 @@
       <component :is="Component" />
     </fade-transition>
   </router-view>
-
-  <snackbar :visible="showUpdateSnack" :status="updateStatus" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
-import Snackbar, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
 
 export default defineComponent({
-  components: { FadeTransition, Snackbar },
+  components: { FadeTransition },
   name: "App",
-  data: () => ({
-    updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE
-  }),
   methods: {
     installViewportCorrectionPlugin() {
       //Copied from postcss-viewport-height-correction's github
@@ -45,14 +39,9 @@ export default defineComponent({
       );
     }
   },
-  computed: {
-    showUpdateSnack(): boolean {
-      return this.$route.name == 'Home';
-    }
-  },
   mounted() {
     this.installViewportCorrectionPlugin();
-  },
+  }
 });
 </script>
 
