@@ -4,27 +4,31 @@
 
 @layer components {
   .btn {
-    @apply text-white shadow-md 
+    @apply text-white shadow-md
             font-bold rounded-md bg-blue-800 px-4 py-2;
     @apply hover:bg-blue-600;
   }
 
   .btn-white {
-    @apply bg-white text-black hover:bg-gray-200 ring-gray-500;  
+    @apply bg-white text-black hover:bg-gray-200 ring-gray-500;
   }
-  
+
+  .btn-small {
+    @apply px-3 py-1
+  }
+
   .btn:active {
     @apply transform scale-95 shadow-xl;
   }
-  
+
   .btn:focus {
     @apply outline-none ring-4;
   }
-  
+
   .input {
     @apply outline-none rounded-md appearance-none bg-white shadow-md focus:ring-2 px-3 py-2;
   }
-  
+
   .input-label {
     @apply uppercase font-bold mb-1 text-blue-700 text-xs;
   }

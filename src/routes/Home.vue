@@ -92,7 +92,7 @@
     <update-snack
       :visible="!showForm && updateSnackVisible"
       :status="updateStatus"
-      @click="refresh"
+      @restart="refresh"
     />
   </div>
 </template>
@@ -106,6 +106,7 @@ import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import RecentsDatabase from '@/recentsdb';
 import UpdateSnack, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
+import { register } from 'register-service-worker';
 
 import { DEFAULT_NAME, Sheet } from '@/types';
 
@@ -148,13 +149,35 @@ export default defineComponent({
       });
     },
     refresh() {
-      window.location.reload();
+      window.location.replace('/?uptodate=true');
     },
     checkForUpdate() {
-      setTimeout(() => {
+      const that = this;
+
+      register('/sw.js', {
+        updated () {
+          console.log('New content is available; please refresh.');
+          setTimeout(() => {
+            that.updateSnackVisible = true;
+          }, 1000);
+        },
+        ready() {
+          console.log('SW is active.');
+        },
+        registered() {
+          console.log('SW is registered');
+        },
+        cached() {
+          console.log('Content cached');
+        }
+      });
+
+      if (this.$route.query.uptodate) {
         this.updateStatus = UpdateSnackStatus.STATUS_UP_TO_DATE;
-        this.updateSnackVisible = true;
-      }, 1000);
+        window.history.replaceState({}, document.title, '/');
+
+        setTimeout(() => this.updateSnackVisible = false, 4000);
+      }
     }
   },
   async mounted() {

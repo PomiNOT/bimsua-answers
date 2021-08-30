@@ -7,7 +7,31 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     vue(),
-    VitePWA()
+    VitePWA({
+      includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon.png'],
+      workbox: {
+        swDest: './dist/sw.js'
+      },
+      manifest: {
+        name: 'bimsua Answers',
+        short_name: 'Answers!',
+        description: 'Create and view multiple choice answers',
+        theme_color: '#f3f4f6',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]
+      }
+    })
   ],
   resolve: {
     alias: {
