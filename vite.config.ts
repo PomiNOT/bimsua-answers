@@ -1,10 +1,25 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import vue from '@vitejs/plugin-vue';
+import fs from 'fs';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const certAndKeySet = !!process.env.CERT_FILE && !!process.env.KEY_FILE;
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server:  {
+    https: certAndKeySet ? {
+      cert: fs.readFileSync(process.env.CERT_FILE),
+      key: fs.readFileSync(process.env.KEY_FILE)
+    } : false,
+    fs: {
+      strict: true
+    }
+  },
   plugins: [
     vue(),
     VitePWA({

@@ -1,5 +1,9 @@
 <template>
-  <div class="h-screen grid place-items-center">
+  <div v-if="!online && !showForm" class="h-screen grid place-items-center">
+    <offline />
+  </div>
+
+  <div class="h-screen grid place-items-center" v-else>
     <bounce-transition mode="out-in">
       <div v-if="!showForm">
         <div class="flex flex-col items-center">
@@ -22,7 +26,6 @@
                     Load recent
                   </button>
                 </template>
-
                 <floating-menu-page
                   name="main"
                   title="Load recent"
@@ -44,7 +47,6 @@
                   </template>
                 </floating-menu-page>
               </floating-menu>
-
               <button data-flip-key="create" type="button" @click="showForm = true" class="btn">
                 Create new!
               </button>
@@ -84,7 +86,7 @@
         </div>
         <div class="flex space-x-2 justify-center">
           <button type="button" class="btn btn-white" @click="showForm = false">Go back</button>
-          <button type="button" class="btn" @click="createNew">Let's go!</button>
+          <button type="button" class="btn" @click="createNew" :title="!online ? 'No Connection' : ''" :disabled="!online">Let's go!</button>
         </div>
       </form>
     </bounce-transition>
@@ -106,7 +108,9 @@ import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import RecentsDatabase from '@/recentsdb';
 import UpdateSnack, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
+import Offline from '@/components/Offline.vue';
 import { register } from 'register-service-worker';
+import online from '@/onlineNotifier';
 
 import { DEFAULT_NAME, Sheet } from '@/types';
 
@@ -114,7 +118,7 @@ export default defineComponent({
   name: 'HomeScreen',
   components: {
     Illustration, Flipper, BounceTransition, FloatingMenu, FloatingMenuPage,
-    UpdateSnack
+    UpdateSnack, Offline
   },
   data: () => ({
     showForm: false,
@@ -123,7 +127,8 @@ export default defineComponent({
     nQuestion: 5,
     recents: [] as Sheet[],
     menuExpanded: false,
-    updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE
+    updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE,
+    online
   }),
   methods: {
     createNew() {

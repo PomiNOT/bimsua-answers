@@ -123,7 +123,7 @@
         subtitle="Your data will be lost forever"
       >
         <template #actions>
-          <button type="button" @click="deleteSheet">{{ deleting ? 'Trashing...' : 'Delete' }}</button>
+          <button type="button" @click="deleteSheet" :title="!online ? 'No Connection' : ''" :disabled="!online">{{ online ? (deleting ? 'Trashing...' : 'Delete') : 'Delete (no connection)' }}</button>
           <button type="button" @click="activePage = 'main'">Cancel</button>
         </template>
       </floating-menu-page>
@@ -151,6 +151,7 @@ import FadeTransition from './common-transitions/FadeTransition.vue';
 import VirtualList from '@/components/VirtualList.vue';
 import copy from 'copy-to-clipboard';
 import { Answer } from '@/types';
+import online from '@/onlineNotifier';
 
 export default defineComponent({
   name: 'Editor',
@@ -185,7 +186,8 @@ export default defineComponent({
     newnQuestion: 0,
     newName: '',
     deleting: false,
-    copied: false
+    copied: false,
+    online
   }),
   computed: {
     shareLink(): string {

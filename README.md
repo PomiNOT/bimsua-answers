@@ -25,4 +25,7 @@ VITE_MESSAGING_SENDER_ID=<your value>
 VITE_APP_ID=<your value>
 VITE_ENABLE_GOOGLE_ANALYTICS=<1 or 0>
 VITE_ENABLE_PERF_MONITORING=<1 or 0>
+CERT_FILE=<path to cert file>
+KEY_FILE=<path to key file>
 ```
+```CERT_FILE``` and ```KEY_FILE``` option are for enabling https on your local development server.

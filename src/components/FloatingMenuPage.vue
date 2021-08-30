@@ -38,6 +38,10 @@ export default defineComponent({
   @apply hover:bg-gray-100 focus:outline-none hover:bg-opacity-25 focus:bg-gray-100 focus:bg-opacity-25;
 }
 
+.floating-menu-page button:disabled {
+  @apply cursor-not-allowed opacity-30;
+}
+
 .floating-menu-page input.input {
   @apply bg-opacity-25 placeholder-gray-300 text-white;
 }
