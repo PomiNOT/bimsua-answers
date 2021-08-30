@@ -1,9 +1,5 @@
 <template>
-  <div v-if="!online && !showForm" class="h-screen grid place-items-center">
-    <offline />
-  </div>
-
-  <div class="h-screen grid place-items-center" v-else>
+  <div class="h-screen grid place-items-center">
     <bounce-transition mode="out-in">
       <div v-if="!showForm">
         <div class="flex flex-col items-center">
@@ -108,7 +104,6 @@ import FloatingMenuPage from '@/components/FloatingMenuPage.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import RecentsDatabase from '@/recentsdb';
 import UpdateSnack, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
-import Offline from '@/components/Offline.vue';
 import { register } from 'register-service-worker';
 import online from '@/onlineNotifier';
 
@@ -118,7 +113,7 @@ export default defineComponent({
   name: 'HomeScreen',
   components: {
     Illustration, Flipper, BounceTransition, FloatingMenu, FloatingMenuPage,
-    UpdateSnack, Offline
+    UpdateSnack
   },
   data: () => ({
     showForm: false,
@@ -128,7 +123,8 @@ export default defineComponent({
     recents: [] as Sheet[],
     menuExpanded: false,
     updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE,
-    online
+    online,
+    registration: null as ServiceWorkerRegistration | null
   }),
   methods: {
     createNew() {
@@ -154,13 +150,15 @@ export default defineComponent({
       });
     },
     refresh() {
+      this.registration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
       window.location.replace('/?uptodate=true');
     },
     checkForUpdate() {
       const that = this;
 
       register('/sw.js', {
-        updated () {
+        updated (registration) {
+          that.registration = registration;
           console.log('New content is available; please refresh.');
           setTimeout(() => {
             that.updateSnackVisible = true;

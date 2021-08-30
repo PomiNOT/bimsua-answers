@@ -23,7 +23,6 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon.png'],
       workbox: {
         swDest: './dist/sw.js'
       },
@@ -34,12 +33,12 @@ export default defineConfig({
         theme_color: '#f3f4f6',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: '/assets/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/assets/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'

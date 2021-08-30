@@ -1,4 +1,6 @@
 <template>
+  <offline :visible="!online" />
+
   <router-view v-slot="{ Component }">
     <fade-transition mode="out-in">
       <component :is="Component" />
@@ -9,10 +11,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
+import Offline from '@/components/Offline.vue';
+import online from '@/onlineNotifier';
 
 export default defineComponent({
-  components: { FadeTransition },
+  components: { FadeTransition, Offline },
   name: "App",
+  data: () => ({
+    online
+  }),
   methods: {
     installViewportCorrectionPlugin() {
       //Copied from postcss-viewport-height-correction's github

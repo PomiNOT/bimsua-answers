@@ -1,8 +1,4 @@
 <template>
-  <div v-if="!loadingDone && !online" class="h-screen grid place-items-center">
-    <offline />
-  </div>
-
   <transition
     enter-class="opacity-0"
     enter-to-class="opacity-100"
@@ -11,7 +7,6 @@
     leave-to-class="opacity-0 scale-110"
     leave-active-class="transform duration-200"
     mode="out-in"
-    v-else
   >
     <div v-if="!loadingDone" class="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <div class="animate-hover">
@@ -48,9 +43,6 @@ import Illustration from '@/components/Illustration.vue';
 import Viewer from '@/components/Viewer.vue';
 import Flipper from '@/components/flip/Flipper.vue';
 import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
-import Offline from '@/components/Offline.vue';
-import online from '@/onlineNotifier';
-
 import {
   doc,
   getDoc,
@@ -62,19 +54,16 @@ import { DEFAULT_NAME } from '@/types';
 
 export default defineComponent({
   name: 'View',
-  components: { Illustration, Viewer, Flipper, FadeTransition, Offline },
+  components: { Illustration, Viewer, Flipper, FadeTransition },
   data: () => ({
     loadingDone: false,
     hasError: false,
     sheet: {} as any,
     nQuestion: 0,
     name: DEFAULT_NAME,
-    unsubscribe: null as Function | null,
-    online
+    unsubscribe: null as Function | null
   }),
   async mounted() {
-    if (!this.online) return;
-
     const id = this.$route.params.id;
     const pathRefSnapshot = await getDoc(doc(db, `/sheet_refs/${id}`));
 
