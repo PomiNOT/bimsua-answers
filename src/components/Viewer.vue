@@ -1,7 +1,7 @@
 <template>
   <div class="flex zoomIn justify-center">
-    <div 
-      class="w-full p-4 bg-white bg-opacity-20 rotate-slidein sm:p-5 sm:my-20 sm:border-2 
+    <div
+      class="w-full p-4 bg-white bg-opacity-20 rotate-slidein sm:p-5 sm:my-20 sm:border-2
               sm:border-blue-200 sm:w-3/4 md:w-2/3 lg:w-1/2 rounded-lg animate-slidein
               backdrop-filter backdrop-blur-lg
       "
@@ -62,7 +62,7 @@ export default defineComponent({
     showBackground: false
   }),
   async mounted() {
-    await tsParticles.loadJSON('particles', '/particles.json');
+    await tsParticles.loadJSON('particles', '/assets/particles.json');
     this.showBackground = true;
   }
 });

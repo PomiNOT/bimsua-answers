@@ -30,15 +30,23 @@
                   <div class="space-y-2 max-h-36 overflow-y-auto">
                     <button
                       class="w-full flex bg-white bg-opacity-30"
-                      v-for="{ id, name, nQuestion } in recents"
+                      v-for="{ id, name, nQuestion } in recentsFiltered"
                       @click="resume(id)"
                       :key="id"
                     >
                       <p class="flex-1">{{ name }}</p>
                       <p class="bg-white bg-opacity-20 rounded px-2">{{ nQuestion }}</p>
                     </button>
+
+                    <p
+                      class="text-center text-white text-opacity-50 300 font-bold text-xl"
+                      v-if="recentsFiltered.length == 0"
+                    >
+                      No Result
+                    </p>
                   </div>
                   <template #actions>
+                    <input type="text" class="input h-8 w-full" v-model="searchQuery" placeholder="Search your recents...">
                     <button type="button" @click="menuExpanded = false">Close</button>
                   </template>
                 </floating-menu-page>
@@ -106,6 +114,7 @@ import RecentsDatabase from '@/recentsdb';
 import UpdateSnack, { UpdateSnackStatus } from '@/components/UpdateSnack.vue';
 import { register } from 'register-service-worker';
 import online from '@/onlineNotifier';
+import { Index } from 'flexsearch';
 
 import { DEFAULT_NAME, Sheet } from '@/types';
 
@@ -120,11 +129,14 @@ export default defineComponent({
     updateSnackVisible: false,
     sheetName: DEFAULT_NAME,
     nQuestion: 5,
+    searchQuery: "",
     recents: [] as Sheet[],
     menuExpanded: false,
     updateStatus: UpdateSnackStatus.STATUS_NEW_UPDATE,
     online,
-    registration: null as ServiceWorkerRegistration | null
+    registration: null as ServiceWorkerRegistration | null,
+    recentsDB: new RecentsDatabase(),
+    recentsIndex: new Index({ tokenize: 'full' })
   }),
   methods: {
     createNew() {
@@ -183,9 +195,22 @@ export default defineComponent({
       }
     }
   },
+  computed: {
+    recentsFiltered(): Sheet[] {
+      if (this.searchQuery.length == 0) return this.recents;
+
+      const matches = this.recentsIndex.search(this.searchQuery, { suggest: true });
+
+      return matches.map((i: number) => this.recents[i]);
+    }
+  },
   async mounted() {
-    const recentsdb = new RecentsDatabase();
-    this.recents = await recentsdb.recents.toArray();
+    this.recents = await this.recentsDB.recents.toArray();
+
+    for (const [index, { name }] of this.recents.entries()) {
+      this.recentsIndex.add(index, name);
+    }
+
     this.checkForUpdate();
   }
 });
