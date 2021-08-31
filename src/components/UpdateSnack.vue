@@ -4,10 +4,9 @@
       class="
         fixed flex items-center w-full md:w-96 bg-blue-800 p-2 bottom-0 left-0
         md:left-1/2 transform md:-translate-x-1/2 md:rounded-lg md:px-3
-        transition-transform duration-300
+        transition-transform duration-300 z-50
       "
       :class="visible ? 'translate-y-0 md:-translate-y-3' : 'translate-y-full'"
-      style="z-index: 200;"
     >
       <span>🎉</span>
       <span class="ml-2 flex-1 font-bold text-white">
