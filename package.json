@@ -9,8 +9,13 @@
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "copy-to-clipboard": "^3.3.1",
+<<<<<<< HEAD
     "dexie": "^3.2.0",
     "firebase": "^9.6.4",
+=======
+    "dexie": "^3.0.3",
+    "firebase": "^9.1.0",
+>>>>>>> 9c136a6edf1696ae8be23306b204b0248f2e6aa4
     "flexsearch": "^0.7.21",
     "flip-toolkit": "^7.0.13",
     "genid": "^0.1.0",
