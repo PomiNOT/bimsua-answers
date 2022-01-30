@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from 'firebase/firestore';
 
 let config: any = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -34,6 +34,7 @@ if (import.meta.env.VITE_ENABLE_PERF_MONITORING) {
   });
 }
 
+
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
@@ -41,3 +42,5 @@ if (import.meta.env.DEV) {
   connectFirestoreEmulator(db, 'localhost', 8080);
   connectAuthEmulator(auth, 'http://localhost:9099');
 }
+
+enableIndexedDbPersistence(db);

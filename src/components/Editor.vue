@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen px-2">
+  <div v-if="sheet" class="h-screen px-2">
     <header
       class="
         fixed top-0 left-0 z-10 w-full backdrop-filter backdrop-blur-md
@@ -123,7 +123,7 @@
         subtitle="Your data will be lost forever"
       >
         <template #actions>
-          <button type="button" @click="deleteSheet" :title="!online ? 'No Connection' : ''" :disabled="!online">{{ online ? (deleting ? 'Trashing...' : 'Delete') : 'Delete (no connection)' }}</button>
+          <button type="button" @click="deleteSheet(false)" :title="!online ? 'No Connection' : ''" :disabled="!online">{{ online ? (deleting ? 'Trashing...' : 'Delete') : 'Delete (no connection)' }}</button>
           <button type="button" @click="activePage = 'main'">Cancel</button>
         </template>
       </floating-menu-page>
@@ -139,6 +139,21 @@
         </template>
       </floating-menu-page>
     </floating-menu>
+  </div>
+  <div v-else class="h-screen px-2 grid place-items-center">
+    <h1 class="text-4xl font-bold text-blue-800" v-if="deleting">Trashed</h1>
+    <div class="text-center" v-else>
+      <h1 class="text-xl text-blue-800 font-bold">This sheet... does not contain a sheet</h1>
+      <p class="text-gray-500">It may either have been deleted or corrupted</p>
+      <div class="space-x-2">
+        <button type="button" @click="deleteSheet(true)" class="btn btn-white mt-3">
+          Delete
+        </button>
+        <button type="button" @click="goHome" class="btn mt-3">
+          Go home
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -218,8 +233,8 @@ export default defineComponent({
     updateName() {
       this.$emit('nameUpdate', this.newName);
     },
-    deleteSheet() {
-      this.$emit('deleteSheet');
+    deleteSheet(onlyRemoveFromRecents: boolean = false) {
+      this.$emit('deleteSheet', onlyRemoveFromRecents);
       this.deleting = true;
     },
     updateRightAnswer(rightAnswer: unknown) {

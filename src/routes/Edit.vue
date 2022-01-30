@@ -131,18 +131,18 @@ export default defineComponent({
       ]);
     },
 
-    async deleteSheet() {
-      let batch = writeBatch(db);
-
-      batch.delete(doc(db, this.getPathForSheet()));
-      batch.delete(doc(db, `/sheet_refs/${this.id}`));
-
-      await Promise.all([
-        batch.commit(),
-        localForage.removeItem('lastID'),
-        recentsdb.recents.delete(this.id)
-      ]);
-
+    async deleteSheet(onlyRemoveFromRecents: boolean = false) {
+      if (!onlyRemoveFromRecents) {
+        let batch = writeBatch(db);
+  
+        batch.delete(doc(db, this.getPathForSheet()));
+        batch.delete(doc(db, `/sheet_refs/${this.id}`));
+        await batch.commit();
+      }
+      
+      localForage.removeItem('lastID');
+      await recentsdb.recents.delete(this.id);
+      
       this.$router.push('/');
     },
 
