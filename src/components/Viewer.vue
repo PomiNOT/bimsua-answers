@@ -6,9 +6,16 @@
               backdrop-filter backdrop-blur-lg
       "
     >
-      <div class="mb-4 sm:mb-5">
-        <h1 class="text-2xl font-bold text-blue-800">{{ name }}</h1>
-        <p class="text-gray-500">{{ nQuestion }} questions</p>
+      <div class="mb-4 flex items-center sm:mb-5">
+        <div class="flex-1">
+          <h1 class="text-2xl font-bold text-blue-800">{{ name }}</h1>
+          <p class="text-gray-500">{{ nQuestion }} questions</p>
+        </div>
+        <fade-transition>
+          <div v-if="score > 0" class="bg-green-700 bg-opacity-40 rounded text-white px-5 py-2 text-xl font-bold">
+            {{ score }}
+          </div>
+        </fade-transition>
       </div>
       <virtual-list
         :length="nQuestion"
@@ -23,6 +30,7 @@
           <view-card
             :question="index + 1"
             :answer="sheet[index + 1] ?? '...'"
+            :rightAnswer="rightSheet[index + 1]"
           />
         </template>
       </virtual-list>
@@ -40,10 +48,11 @@ import { defineComponent } from 'vue';
 import { tsParticles } from 'tsparticles';
 import ViewCard from '@/components/ViewCard.vue';
 import VirtualList from '@/components/VirtualList.vue';
+import FadeTransition from '@/components/common-transitions/FadeTransition.vue';
 
 export default defineComponent({
   name: 'Viewer',
-  components: { ViewCard, VirtualList },
+  components: { ViewCard, VirtualList, FadeTransition },
   props: {
     nQuestion: {
       type: Number,
@@ -56,11 +65,30 @@ export default defineComponent({
     sheet: {
       type: Object,
       required: true
+    },
+    rightSheet: {
+      type: Object,
+      required: true
     }
   },
   data: () => ({
     showBackground: false
   }),
+  computed: {
+    score(): number {
+      const rights = Object.keys(this.rightSheet).map((question) => {
+        return this.rightSheet[question] == this.sheet[question];
+      });
+
+      if (rights.length == 0) {
+        return 0;
+      }
+
+      const rightCount = rights.reduce((count, isRight) => count + (isRight ? 1 : 0), 0);
+      const perTen = (rightCount / this.nQuestion) * 10;
+      return perTen % 1 == 0 ? perTen : parseFloat(perTen.toFixed(2));
+    }
+  },
   async mounted() {
     await tsParticles.loadJSON('particles', '/assets/particles.json');
     this.showBackground = true;

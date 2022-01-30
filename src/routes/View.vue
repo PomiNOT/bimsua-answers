@@ -32,6 +32,7 @@
       :nQuestion="nQuestion"
       :name="name"
       :sheet="sheet"
+      :rightSheet="rightSheet"
       v-else
     />
   </transition>
@@ -59,6 +60,7 @@ export default defineComponent({
     loadingDone: false,
     hasError: false,
     sheet: {} as any,
+    rightSheet: {} as any,
     nQuestion: 0,
     name: DEFAULT_NAME,
     unsubscribe: null as Function | null
@@ -78,6 +80,7 @@ export default defineComponent({
       const doc = snap.data();
 
       this.sheet = doc?.sheet;
+      this.rightSheet = doc?.rightSheet;
       this.name = doc?.name;
       this.nQuestion = doc?.nQuestion;
 
