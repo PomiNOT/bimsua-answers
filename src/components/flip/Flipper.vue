@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, nextTick } from 'vue';
 import { Flipper } from 'flip-toolkit';
-import { SpringConfig } from 'flip-toolkit/lib/springSettings/types';
 import isEqual from 'lodash.isequal';
 
 export default defineComponent({
@@ -71,7 +70,7 @@ export default defineComponent({
   mounted() {
     let parent = this.$el.parentElement;
 
-    let springConf: SpringConfig = this.spring ?? {
+    let springConf: SpringOption = this.spring ?? {
       stiffness: 1500,
       damping: 100
     }

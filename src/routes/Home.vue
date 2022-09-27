@@ -142,10 +142,10 @@ export default defineComponent({
     createNew() {
       this.$router.push({
         name: 'Edit',
-        params: {
+        state: {
           name: this.sheetName,
           nQuestion: this.nQuestion,
-          creating: 'true'
+          creating: true
         }
       });
     },
@@ -156,7 +156,7 @@ export default defineComponent({
 
       this.$router.push({
         name: 'Edit',
-        params: {
+        state: {
           continueId: id!
         }
       });

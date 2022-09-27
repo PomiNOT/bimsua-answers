@@ -78,14 +78,12 @@ export default defineComponent({
   },
   methods: {
     async updateNQuestion(newnQuestion: number) {
-      await Promise.all([
-        updateDoc(doc(db, this.getPathForSheet()), {
-          nQuestion: newnQuestion
-        }),
-        recentsdb.recents.update(this.id, {
-          nQuestion: newnQuestion
-        })
-      ])
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        nQuestion: newnQuestion
+      });
+      await recentsdb.recents.update(this.id, {
+        nQuestion: newnQuestion
+      });
     },
 
     async updateRightAnswer(newRightAnswer: Answer) {
@@ -121,14 +119,12 @@ export default defineComponent({
     },
 
     async updateName(newName: string) {
-      await Promise.all([
-        updateDoc(doc(db, this.getPathForSheet()), {
-          name: newName
-        }),
-        recentsdb.recents.update(this.id, {
-          name: newName
-        })
-      ]);
+      await updateDoc(doc(db, this.getPathForSheet()), {
+        name: newName
+      });
+      await recentsdb.recents.update(this.id, {
+        name: newName
+      });
     },
 
     async deleteSheet(onlyRemoveFromRecents: boolean = false) {
@@ -152,13 +148,11 @@ export default defineComponent({
     }
   },
   async mounted() {
-    this.name = this.$route.params.name as string;
-    this.nQuestion = parseInt(this.$route.params.nQuestion as string);
-    let continueId = this.$route.params.continueId as string;
-    const creating = !!this.$route.params.creating;
-
-    if (creating) {
+    if (history.state.creating) {
       this.id = genid(ID_LENGTH);
+      this.name = history.state.name;
+      this.nQuestion = history.state.nQuestion;
+
       await Promise.all([
         localForage.setItem('lastID', this.id),
         recentsdb.recents.put({
@@ -167,8 +161,8 @@ export default defineComponent({
           nQuestion: this.nQuestion
         })
       ]);
-    } else if (continueId) {
-      this.id = continueId;
+    } else if (history.state.continueId) {
+      this.id = history.state.continueId;
       await localForage.setItem('lastID', this.id);
     }
     else {
@@ -195,7 +189,7 @@ export default defineComponent({
 
     this.state++;
 
-    if (creating) {
+    if (history.state.creating) {
       let batch = writeBatch(db);
 
       batch.set(doc(db, this.getPathForSheet()), {
@@ -233,6 +227,9 @@ export default defineComponent({
       this.name = docData?.name;
       this.nQuestion = docData?.nQuestion;
       this.loadingDone = true;
+      history.replaceState({
+        creating: false
+      }, '', location.pathname);
     });
 
     this.submitAnswersDebounced = debounce(
