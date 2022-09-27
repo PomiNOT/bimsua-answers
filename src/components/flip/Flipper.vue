@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, nextTick } from 'vue';
 import { Flipper } from 'flip-toolkit';
+import type { SpringOption } from 'flip-toolkit/lib/springSettings/types';
 import isEqual from 'lodash.isequal';
 
 export default defineComponent({
